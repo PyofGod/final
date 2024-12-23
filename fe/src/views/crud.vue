@@ -73,7 +73,7 @@ onMounted(async () => {
   <div>
     <input type="text" v-model="fruitName" name="name" placeholder="name" />
     <input type="text" v-model="fruitColor" name="color" placeholder="color" />
-    <button @click="create" :disabled="!fruitName || !fruitColor">
+    <button @click="create" :disabled="!fruitName || !fruitColor || selectedId != 0">
       Create
     </button>
     <button @click="update" :disabled="!fruitName || !fruitColor || selectedId === 0">
