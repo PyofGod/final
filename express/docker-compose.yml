@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678 # รหัสผ่าน root ของ MySQL
+      MYSQL_DATABASE: fruits # ตั้งชื่อฐานข้อมูล
+    ports:
+      - "3306:3306" # พอร์ตที่ MySQL ใช้งาน
+    volumes:
+      - mysql-data:/var/lib/mysql # เพื่อเก็บข้อมูล MySQL
+volumes:
+  mysql-data:

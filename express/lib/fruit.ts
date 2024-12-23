@@ -1,53 +1,82 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client"; // นำเข้า Prisma Client
+
+const prisma = new PrismaClient(); // สร้าง instance ของ Prisma Client
 export const fruitRoute = express.Router();
-/* C R U D
-GET /api/fruits (GET array of fruit) R
-GET /api/fruits/1 (GET a fruit) R
-POST /api/fruits (Create fruit) C
-PATCH /api/fruits/1 (Update fruit) U
-DELETE /api/fruits/1 (Delete a fruit) D filter
-*/
-let _fruit = [
-  { id: 1, name: "Apple", color: "green" },
-  { id: 2, name: "Apple", color: "red" },
-];
 
-fruitRoute.get("/", (req, res) => {
-  res.json(_fruit);
-});
-fruitRoute.get("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const afruit = _fruit.find((e) => e.id === id);
-  res.json(afruit);
-});
-
-fruitRoute.post("/", (req, res) => {
-  const id = Date.now();
-  console.log(req.body);
-  const afruit = { id, ...req.body };
-  _fruit.push(afruit);
-  res.status(201).json(afruit);
-});
-fruitRoute.delete("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const afruit = _fruit.find((e) => e.id === id);
-  if (afruit) {
-    _fruit = _fruit.filter((e) => e.id !== id);
-    res.sendStatus(204);
-  } else {
-    res.sendStatus(404);
+fruitRoute.get("/", async (req: Request, res: Response) => {
+  try {
+    const fruits = await prisma.fruit.findMany(); // ดึงข้อมูลทั้งหมดจากตาราง Fruit
+    res.json(fruits);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch fruits" });
   }
 });
-fruitRoute.patch("/:id", (req, res) => {
+
+fruitRoute.get("/:id", async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  const afruit = _fruit.find((e) => e.id === id);
-  console.log(afruit);
-  if (afruit) {
-    _fruit = _fruit.filter((e) => e.id !== id);
-    const updatedFruit = { ...afruit, ...req.body };
-    _fruit.push(updatedFruit);
-    res.status(200).json(updatedFruit);
-  } else {
-    res.sendStatus(404);
+  try {
+    const afruit = await prisma.fruit.findUnique({
+      where: { id },
+    });
+    if (afruit) {
+      res.json(afruit);
+    } else {
+      res.sendStatus(404); // ถ้าไม่พบผลลัพธ์
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch the fruit" });
+  }
+});
+
+fruitRoute.post("/", async (req: Request, res: Response) => {
+  const { name, color } = req.body; // ดึงข้อมูลจาก body
+  try {
+    const afruit = await prisma.fruit.create({
+      data: { name, color }, // สร้างรายการใหม่ในฐานข้อมูล
+    });
+    res.status(201).json(afruit);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create fruit" });
+  }
+});
+
+fruitRoute.delete("/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const afruit = await prisma.fruit.findUnique({
+      where: { id },
+    });
+    if (afruit) {
+      await prisma.fruit.delete({
+        where: { id },
+      });
+      res.sendStatus(204); // ลบแล้ว
+    } else {
+      res.sendStatus(404); // ไม่พบรายการ
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete the fruit" });
+  }
+});
+
+fruitRoute.patch("/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { name, color } = req.body;
+  try {
+    const afruit = await prisma.fruit.findUnique({
+      where: { id },
+    });
+    if (afruit) {
+      const updatedFruit = await prisma.fruit.update({
+        where: { id },
+        data: { name, color },
+      });
+      res.status(200).json(updatedFruit);
+    } else {
+      res.sendStatus(404); // ไม่พบผลลัพธ์
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update the fruit" });
   }
 });
