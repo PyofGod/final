@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
 const fruits = ref<{ id: number; name: string; color: string }[]>([]);
 const selectedId = ref<number>(0);
@@ -55,14 +55,21 @@ const update = async () => {
   }
 };
 
-const selectFruit = (id: number) => {
-  const f = fruits.value.find((e) => e.id === id);
-  if (f) {
-    selectedId.value = id;
-    fruitName.value = f.name;
-    fruitColor.value = f.color;
+const undoFruit = (id: number) => {
+  if (selectedId.value === id) {
+    selectedId.value = 0;
+    fruitName.value = "";
+    fruitColor.value = "";
+  } else {
+    const f = fruits.value.find((e) => e.id === id);
+    if (f) {
+      fruitName.value = f.name;
+      fruitColor.value = f.color;
+    }
   }
 };
+
+
 
 onMounted(async () => {
   await load();
@@ -82,7 +89,7 @@ onMounted(async () => {
     <button @click="remove" :disabled="selectedId === 0">Delete</button>
     <ul>
       <li v-for="fruit in fruits" :key="fruit.id">
-        <input type="radio" name="id" @click="selectFruit(fruit.id)" />
+        <input type="radio" name="id" v-model="selectedId" :value="fruit.id" @click="undoFruit(fruit.id)" />
         {{ fruit.name }} : {{ fruit.color }}
       </li>
     </ul>
