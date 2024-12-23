@@ -9,6 +9,12 @@ const apikey = process.env.APIKEY || "123456789";
 if (process.env.NODE_ENV !== "production") {
   app.use(cors());
 }
+
+app.use(express.json())
+app.use(express.raw())
+app.use(express.urlencoded({ extended: true }))
+app.use('/api/fruits', fruitRoute)
+
 const apiKeyCheck = (req: Request, res: Response, next: NextFunction) => {
   console.log("Middleware");
   if (req.headers.apikey !== apikey) {

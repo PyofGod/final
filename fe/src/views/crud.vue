@@ -2,10 +2,10 @@
 import { ref, reactive, onMounted } from "vue";
 
 const fruits = ref<{ id: number; name: string; color: string }[]>([]);
-const selectedId = ref(0);
-const debug = ref("");
-const fruitName = ref("");
-const fruitColor = ref("");
+const selectedId = ref<number>(0);
+const debug = ref<string>("");
+const fruitName = ref<string>("");
+const fruitColor = ref<string>("");
 
 const load = async () => {
   const res = await fetch("http://localhost:4000/api/fruits");
@@ -57,10 +57,7 @@ onMounted(async () => {
     <button @click="create" :disabled="!fruitName || !fruitColor">
       Create
     </button>
-    <button
-      @click="update"
-      :disabled="!fruitName || !fruitColor || selectedId === 0"
-    >
+    <button @click="update" :disabled="!fruitName || !fruitColor || selectedId === 0">
       Update
     </button>
     <button @click="remove" :disabled="selectedId === 0">Delete</button>
