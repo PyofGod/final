@@ -26,7 +26,7 @@ const create = async () => {
 
 const remove = async () => {
   if (selectedId.value !== 0) {
-    await fetch(`http://192.168.1.140:4000/api/fruits${selectedId.value}`, {
+    await fetch(`http://192.168.1.140:4000/api/fruits/${selectedId.value}`, {
       method: "DELETE",
     });
     debug.value = `Deleted fruit with ID ${selectedId.value}`;
@@ -39,8 +39,8 @@ const remove = async () => {
 
 const update = async () => {
   if (selectedId.value !== 0) {
-    await fetch(`http://192.168.1.140:5555/api/fruits/${selectedId.value}`, {
-      method: "PUT",
+    await fetch(`http://192.168.1.140:4000/api/fruits/${selectedId.value}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: fruitName.value,
