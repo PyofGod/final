@@ -8,12 +8,12 @@ const fruitName = ref<string>("");
 const fruitColor = ref<string>("");
 
 const load = async () => {
-  const res = await fetch("http://localhost:4000/api/fruits");
+  const res = await fetch("http://192.168.1.140:4000/api/fruits");
   fruits.value = await res.json();
 };
 
 const create = async () => {
-  await fetch("http://localhost:4000/api/fruits", {
+  await fetch("http://192.168.1.140:4000/api/fruits", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -25,12 +25,34 @@ const create = async () => {
 };
 
 const remove = async () => {
-  debug.value = "Delete " + selectedId.value;
-  selectedId.value = 0;
+  if (selectedId.value !== 0) {
+    await fetch(`http://192.168.1.140:4000/api/fruits${selectedId.value}`, {
+      method: "DELETE",
+    });
+    debug.value = `Deleted fruit with ID ${selectedId.value}`;
+    selectedId.value = 0;
+    fruitName.value = "";
+    fruitColor.value = "";
+    await load();
+  }
 };
 
 const update = async () => {
-  debug.value = "Update " + selectedId.value;
+  if (selectedId.value !== 0) {
+    await fetch(`http://192.168.1.140:5555/api/fruits/${selectedId.value}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: fruitName.value,
+        color: fruitColor.value,
+      }),
+    });
+    debug.value = `Updated fruit with ID ${selectedId.value}`;
+    selectedId.value = 0;
+    fruitName.value = "";
+    fruitColor.value = "";
+    await load();
+  }
 };
 
 const selectFruit = (id: number) => {
@@ -39,9 +61,6 @@ const selectFruit = (id: number) => {
     selectedId.value = id;
     fruitName.value = f.name;
     fruitColor.value = f.color;
-    debug.value = "Select " + selectedId.value;
-  } else {
-    debug.value = id + " not found " + id;
   }
 };
 
@@ -67,6 +86,5 @@ onMounted(async () => {
         {{ fruit.name }} : {{ fruit.color }}
       </li>
     </ul>
-    <div>{{ debug }}</div>
   </div>
 </template>
