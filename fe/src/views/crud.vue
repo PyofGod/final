@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 
-const fruits = ref<{ id: number; name: string; color: string }[]>([]);
+interface fruits {
+  id: number,
+  name: string,
+  color: string
+}
+
+const fruits = ref<fruits[]>([]);
 const selectedId = ref<number>(0);
-const debug = ref<string>("");
 const fruitName = ref<string>("");
 const fruitColor = ref<string>("");
 
-const load = async () => {
+const loadData = async () => {
   const res = await fetch("http://192.168.1.140:4000/api/fruits");
   fruits.value = await res.json();
 };
@@ -21,7 +26,9 @@ const create = async () => {
       color: fruitColor.value,
     }),
   });
-  await load();
+  fruitName.value = "";
+  fruitColor.value = "";
+  await loadData();
 };
 
 const remove = async () => {
@@ -29,11 +36,10 @@ const remove = async () => {
     await fetch(`http://192.168.1.140:4000/api/fruits/${selectedId.value}`, {
       method: "DELETE",
     });
-    debug.value = `Deleted fruit with ID ${selectedId.value}`;
     selectedId.value = 0;
     fruitName.value = "";
     fruitColor.value = "";
-    await load();
+    await loadData();
   }
 };
 
@@ -47,11 +53,10 @@ const update = async () => {
         color: fruitColor.value,
       }),
     });
-    debug.value = `Updated fruit with ID ${selectedId.value}`;
     selectedId.value = 0;
     fruitName.value = "";
     fruitColor.value = "";
-    await load();
+    await loadData();
   }
 };
 
@@ -69,10 +74,8 @@ const undoFruit = (id: number) => {
   }
 };
 
-
-
 onMounted(async () => {
-  await load();
+  await loadData();
 });
 </script>
 

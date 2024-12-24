@@ -60,7 +60,6 @@ fruitRoute.delete("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// PATCH: อัปเดตผลไม้ตาม ID
 fruitRoute.patch("/:id", async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { name, color } = req.body;
