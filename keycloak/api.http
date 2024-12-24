@@ -1,0 +1,81 @@
+@host = https://identity.frappet.synology.me
+@token = MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzdaY6hyfBtsJWx8EYiXnharkR+rZFYU3/URAqOoHSmuv+87/05FZkZ/bqs1k9aonnzD+jrXsEVOckXzI2avqwhJbsgvIR9BCz07wGJymQxmFZUDxyv1Txkm/HB/5EkxXMENkHrbXP4q5Fe70yE/SUvSyzwOHptwk9jv3JWHrQI3DUFCJYcxcBfNsoUuofaiXp7BB8ZKS9QU+YZem9EgEQGXvrkCnqRSblpEG+7bKoLjcNyGoAxFBAjfBi+5qIPTHAaHfc2N08VIXJGOok+lzZl8kD4sMcNA21sHwExOcnUKXTufmJpLNdFs25tr2+K9S/9pdlXI7PS9+oxSDXSM6qwIDAQAB
+
+
+## public key of realm
+GET {{host}}/realms/fluk-tiw
+### Login for realms user
+POST {{host}}/realms/fluk-tiw/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=express-client
+&username=fluk
+&password=123
+&grant_type=password
+
+
+########## Admin API https://www.keycloak.org/docs-api/latest/rest-api/index.html
+## Login by admin of master realms
+POST {{host}}/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=admin-cli
+&username=admin
+&password=admin
+&grant_type=password
+
+### Login by secret of sso realms (server to server)
+POST {{host}}/realms/Chayutphong/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=b2b-client
+&client_secret=yX9tg1EydPL55rB6Walu1ctXitstkcep
+&grant_type=client_credentials
+
+### default realms config
+GET {{host}}/admin/realms
+Authorization: Bearer {{token}}
+
+### Get Realms config
+GET {{host}}/admin/realms/Chayutphong
+Authorization: Bearer {{token}}
+
+### Get users in realms
+GET {{host}}/admin/realms/Chayutphong/users
+Authorization: Bearer {{token}}
+
+### Create user in realms
+POST {{host}}/admin/realms/fluk-tiw/users
+Authorization: Bearer {{token}}
+
+{
+    "username":"fluk2",
+    "email":"fluk2@aaa.com",
+    "enabled":true,
+    "credentials":[
+        {
+            "temporary":false,
+            "type":"password",
+            "value":"fluk2"
+        }
+    ]
+}
+
+### assign role not finished yet
+POST {{host}}/admin/realms/sso/users/user_id/role-mappings/clients/client_uuid
+
+### Get a user by name
+GET {{host}}/admin/realms/sso/users/?username=oom
+Authorization: Bearer {{token}}
+
+### Delete user
+DELETE {{host}}/admin/realms/sso/users/9144accb-ed90-461c-a00a-23aa02d2ef53
+Authorization: Bearer {{token}}
+
+### Find id of express-client
+GET {{host}}/admin/realms/sso/clients/?clientId=express-client
+Authorization: Bearer {{token}}
+
+### Get role list in express-client
+GET {{host}}/admin/realms/sso/clients/ea8ca0eb-f5f7-4843-a060-f0c263b30d26/roles
+Authorization: Bearer {{token}}

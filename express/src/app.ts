@@ -2,7 +2,8 @@ import "dotenv/config";
 import express, { Express, Request, Response, NextFunction } from "express";
 const app: Express = express();
 import cors from "cors";
-import { fruitRoute } from "../lib/fruit";
+
+import { fruitRoute } from "./lib/fruit";
 
 const port = Number(process.env.PORT) || 3000;
 const apikey = process.env.APIKEY || "123456789";
@@ -28,4 +29,5 @@ app.use("/api/fruits", fruitRoute);
 app.get("/", (req, res) => {
   res.send("Hello Express");
 });
+
 app.listen(port, () => console.log(`Application is running on port ${port}`));

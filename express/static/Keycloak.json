@@ -1,0 +1,8 @@
+{
+    "realm": "fluk-tiw",
+    "auth-server-url": "http://localhost:3022/",
+    "ssl-required": "external",
+    "resource": "express-client",
+    "public-client": true,
+    "confidential-port": 0
+  }
