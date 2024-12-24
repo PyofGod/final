@@ -10,10 +10,10 @@ if (process.env.NODE_ENV !== "production") {
   app.use(cors());
 }
 
-app.use(express.json())
-app.use(express.raw())
-app.use(express.urlencoded({ extended: true }))
-app.use('/api/fruits', fruitRoute)
+app.use(express.json());
+app.use(express.raw());
+app.use(express.urlencoded({ extended: true }));
+app.use("/api/fruits", fruitRoute);
 
 const apiKeyCheck = (req: Request, res: Response, next: NextFunction) => {
   console.log("Middleware");
@@ -24,9 +24,6 @@ const apiKeyCheck = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 //app.use(apiKeyCheck);
-app.get("/hello2", apiKeyCheck, (_req, res) => {
-  res.send("Hello 2");
-});
 app.use("/api/fruits", fruitRoute);
 app.get("/", (req, res) => {
   res.send("Hello Express");

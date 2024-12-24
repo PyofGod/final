@@ -83,16 +83,28 @@ onMounted(async () => {
   <div>
     <input type="text" v-model="fruitName" name="name" placeholder="name" />
     <input type="text" v-model="fruitColor" name="color" placeholder="color" />
-    <button @click="create" :disabled="!fruitName || !fruitColor || selectedId != 0">
+    <button
+      @click="create"
+      :disabled="!fruitName || !fruitColor || selectedId != 0"
+    >
       Create
     </button>
-    <button @click="update" :disabled="!fruitName || !fruitColor || selectedId === 0">
+    <button
+      @click="update"
+      :disabled="!fruitName || !fruitColor || selectedId === 0"
+    >
       Update
     </button>
     <button @click="remove" :disabled="selectedId === 0">Delete</button>
     <ul>
       <li v-for="fruit in fruits" :key="fruit.id">
-        <input type="radio" name="id" v-model="selectedId" :value="fruit.id" @click="undoFruit(fruit.id)" />
+        <input
+          type="radio"
+          name="id"
+          v-model="selectedId"
+          :value="fruit.id"
+          @click="undoFruit(fruit.id)"
+        />
         {{ fruit.name }} : {{ fruit.color }}
       </li>
     </ul>
