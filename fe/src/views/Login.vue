@@ -25,8 +25,7 @@ export default defineComponent({
     }
   }, async mounted() {
     try {
-      const res = await HttpService.getAxiosClient().get("http://localhost:3001/api/profile")
-      //console.log(res.data)
+      const res = await HttpService.getAxiosClient().get("http://http://192.168.1.140/api/profile")
       this.protect = JSON.stringify(res.data, null, 4)
     } catch (e) {
       console.log(e)
@@ -57,7 +56,6 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
