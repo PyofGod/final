@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import KeycloakService from "@/service/KeycloakService";
+import HttpService from "@/service/HttpService";
 
 interface fruits {
   id: number;
@@ -14,50 +16,59 @@ const fruitColor = ref<string>("");
 const BASE_PATH = "http://192.168.1.140:4000";
 
 const loadData = async () => {
-  const res = await fetch(`${BASE_PATH}/api/fruits`);
-  fruits.value = await res.json();
+  const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/fruits`);
+  fruits.value = res.data;
 };
 
 const create = async () => {
-  await fetch(`${BASE_PATH}/api/fruits`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  try {
+    const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/fruits`, {
       name: fruitName.value,
       color: fruitColor.value,
-    }),
-  });
-  fruitName.value = "";
-  fruitColor.value = "";
-  await loadData();
+    });
+    if (res.status === 201) {
+      await loadData();
+      console.log('Fruit added successfully');
+    } else {
+      console.log('Failed to add fruit');
+    }
+  } catch (error) {
+    console.log('Failed to add fruit');
+  }
 };
 
 const remove = async () => {
-  if (selectedId.value !== 0) {
-    await fetch(`${BASE_PATH}/api/fruits/${selectedId.value}`, {
-      method: "DELETE",
-    });
-    selectedId.value = 0;
-    fruitName.value = "";
-    fruitColor.value = "";
-    await loadData();
+  try {
+    const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/fruits/${selectedId.value}`);
+    if (res.status === 200) {
+      await loadData(); // Reload fruits list
+      selectedId.value = 0;
+      console.log('Fruit removed successfully');
+    } else {
+      console.log('Failed to remove fruit');
+    }
+  } catch (error) {
+    console.log('Failed to remove fruit');
   }
 };
 
 const update = async () => {
-  if (selectedId.value !== 0) {
-    await fetch(`${BASE_PATH}/api/fruits/${selectedId.value}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+  try {
+    const response = await HttpService.getAxiosClient().patch(
+      `${BASE_PATH}/fruits/${selectedId.value}`,
+      {
         name: fruitName.value,
         color: fruitColor.value,
-      }),
-    });
-    selectedId.value = 0;
-    fruitName.value = "";
-    fruitColor.value = "";
-    await loadData();
+      },
+    );
+    if (response.status === 200) {
+      await loadData();
+      console.log('Fruit updated successfully');
+    } else {
+      console.log('Failed to update fruit');
+    }
+  } catch (error) {
+    console.log('Failed to update fruit');
   }
 };
 
