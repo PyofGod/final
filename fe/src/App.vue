@@ -9,6 +9,8 @@ import { RouterLink, RouterView } from "vue-router";
         <nav>
           <RouterLink to="/" class="nav-link" active-class="active">Home</RouterLink>
           <RouterLink to="/login" class="nav-link" active-class="active">Login</RouterLink>
+          <RouterLink to="/Product" class="nav-link" active-class="active">Product</RouterLink>
+          <RouterLink to="/categories" class="nav-link" active-class="active">Catagories</RouterLink>
         </nav>
       </div>
     </header>
@@ -44,9 +46,7 @@ main {
 
 
 nav {
-  width: 100%;
   font-size: 12px;
-  text-align: center;
   margin-top: 2rem;
 }
 
@@ -89,9 +89,7 @@ nav a.active {
     text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
-
     padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import KeycloakService from "@/service/KeycloakService";
 import HttpService from "@/service/HttpService";
 
 interface fruits {
@@ -29,6 +28,8 @@ const create = async () => {
     if (res.status === 201) {
       await loadData();
       console.log('Fruit added successfully');
+      fruitName.value = ''
+      fruitColor.value = ''
     } else {
       console.log('Failed to add fruit');
     }
