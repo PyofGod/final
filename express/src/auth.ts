@@ -1,169 +1,81 @@
-import jwt from "jsonwebtoken";
-/* look like strong type does not need, see type definition of JwtPayload
-declare module "jsonwebtoken" {
-    export interface CustomJwtPayload extends jwt.JwtPayload {
-        role?: string[];
-    }
-}*/
-import { Request, Response, NextFunction } from "express";
-import fetch from "node-fetch-commonjs";
-let public_key = "";
+import Express from "express";
+import { createDecoder, createVerifier } from "fast-jwt";
 
-/**
- * Initialize Public Key before use
- * @param url URL to realm ,example http://keycloak.local/realms/sso
- */
-export async function initPublicKeyOnline(url: string) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Fetch public key fail");
-    const data = (await res.json()) as { public_key: string };
-    if (!data.public_key) {
-      throw new Error("Fetch public key fail");
-    }
-    public_key = `-----BEGIN PUBLIC KEY-----\n${data.public_key}\n-----END PUBLIC KEY-----`;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-  console.log("initPublicKeyOnline \n", public_key);
-  return true;
-}
-/**
- * Initialize Public Key before use
- * @param key undefine alway return false
- */
-export async function initPublicKey(key: string) {
-  public_key = `-----BEGIN PUBLIC KEY-----\n${key}\n-----END PUBLIC KEY-----`;
-  console.log("initPublicKey " + public_key);
-  return true;
+import HttpError from "./interfaces/http-error";
+import HttpStatus from "./interfaces/http-status";
+
+if (!process.env.PUBLIC_KEY && !process.env.URL) {
+  throw new Error("Require keycloak PUBLIC_KEY or URL with REALM.");
 }
 
-/**
- * Express middleware verify token in authorization header use public key
- * faster than verifyOnline
- * @example
- * ```ts
- * import {verify,verify,getDecodeToken} from './auth'
- * ...
- * app.get('/api/profile',verify,nextMiddleWare)
- * ```
- */
-export async function verify(req: Request, res: Response, next: NextFunction) {
-  const berrerHeader = req.headers["authorization"];
-  const token = berrerHeader && berrerHeader.split(" ")[1];
-  if (!token) return res.status(401).send({ error: "No authorization token" });
-  try {
-    //console.log(token)
-    let decodedToken = jwt.verify(token, public_key, {
-      algorithms: ["RS256"],
-    }) as jwt.JwtPayload;
-    console.log(decodedToken.role);
-    next();
-  } catch (e) {
-    if (
-      e instanceof jwt.JsonWebTokenError ||
-      e instanceof jwt.TokenExpiredError ||
-      e instanceof jwt.NotBeforeError
-    ) {
-      return res.status(401).send({ error: `Verify token fail ${e.message}` });
-    }
-    return res.status(401).send({ error: "Unknow error" });
-  }
-}
-/**
- * Express middleware verify token with role check
- * found only one role in array match is pass (or)
- * @example
- * ```ts
- * import {protect,getDecodeToken} from './auth'
- * ...
- * app.get('/api/profile',verifyRoles(["admin"]),nextMiddleWare)
- * ```
- */
-export function verifyRoles(roles: string[]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const berrerHeader = req.headers["authorization"];
-    const token = berrerHeader && berrerHeader.split(" ")[1];
-    if (!token)
-      return res.status(401).send({ error: "No authorization token" });
-    try {
-      let decodedToken = jwt.verify(token, public_key, {
-        algorithms: ["RS256"],
-      }) as jwt.JwtPayload;
-      let roleList = decodedToken.role;
-      if (!roleList) return res.status(401).send({ error: `No role in token` });
+const jwtVerify = createVerifier({
+  key: async () => {
+    return `-----BEGIN PUBLIC KEY-----\n${process.env.PUBLIC_KEY}\n-----END PUBLIC KEY-----`;
+  },
+});
 
-      for (let i = 0; i < roleList.length; i++) {
-        if (roles.includes(roleList[i])) next();
-      }
-      return res
-        .status(401)
-        .send({ error: `Rols not match ` + roleList.join(",") });
-    } catch (e) {
-      if (
-        e instanceof jwt.JsonWebTokenError ||
-        e instanceof jwt.TokenExpiredError ||
-        e instanceof jwt.NotBeforeError
-      ) {
-        return res
-          .status(401)
-          .send({ error: `Verify token fail ${e.message}` });
-      }
-      return res.status(401).send({ error: "Unknow error" });
-    }
-  };
-}
-/**
- * Express middleware verify token in authorization header use api endpoint
- * slow but secre for band token
- * @example
- * ```ts
- * import {verify,verifyOnline,getDecodeToken} from './auth'
- * ...
- * app.get('/api/profile',verifyOnline,nextMiddleWare)
- * ```
- */
+const jwtDecode = createDecoder();
 
-export async function verifyOnline(
-  req: Request,
-  res: Response,
-  next: NextFunction
+export async function expressAuthentication(
+  request: Express.Request,
+  _securityName?: string,
+  _scopes?: string[]
 ) {
-  res.locals.data = {};
-  const berrerHeader = req.headers["authorization"];
-  const token = berrerHeader && berrerHeader.split(" ")[1];
-  if (!token) return res.status(401).send({ error: "No authorization token" });
+  const token = request.headers["authorization"]?.includes("Bearer ")
+    ? request.headers["authorization"].split(" ")[1]
+    : request.headers["authorization"];
 
-  const r = await fetch(
-    `${process.env.REALM_URL}/protocol/openid-connect/userinfo`,
-    {
-      headers: {
-        Authorization: `${req.headers.authorization}`,
-      },
-    }
-  );
-  if (r.ok) {
-    let decodedToken = (await r.json()) as jwt.JwtPayload;
-    next();
-  } else {
-    return res.status(401).send({ error: "Verify token endpoint fail" });
+  if (!token) {
+    throw new HttpError(
+      HttpStatus.UNAUTHORIZED,
+      "ไม่พบข้อมูลสำหรับยืนยันตัวตน"
+    );
   }
+
+  let payload: Record<string, any> = {};
+
+  switch (process.env.PREFERRED_MODE) {
+    case "online":
+      payload = await verifyOnline(token);
+      break;
+    case "offline":
+      payload = await verifyOffline(token);
+      break;
+    default:
+      if (process.env.URL) {
+        payload = await verifyOnline(token);
+        break;
+      }
+      if (process.env.PUBLIC_KEY) {
+        payload = await verifyOffline(token);
+        break;
+      }
+  }
+
+  return payload;
 }
-/**
- * retrive decoded token after call verify or verifyOnline
- * @example
- * ```ts
- * import {verify,verifyOnline,getDecodeToken} from './auth'
- * ...
- * app.get('/api/profile',verifyOnline,(req: Request,res: Response) => {
- *   res.json(getDecodeToken(req))
- * })
- * ```
- */
-export function getDecodeToken(req: Request) {
-  const berrerHeader = req.headers["authorization"];
-  const token = berrerHeader && berrerHeader.split(" ")[1];
-  if (!token) return null;
-  return jwt.decode(token, { complete: true }) as jwt.JwtPayload;
+
+async function verifyOffline(token: string) {
+  const payload = await jwtVerify(token).catch((_) => null);
+  if (!payload) {
+    throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่สามารถยืนยันตัวตนได้");
+  }
+  return payload;
+}
+
+async function verifyOnline(token: string) {
+  const res = await fetch(
+    `${process.env.URL}/protocol/openid-connect/userinfo`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    }
+  ).catch((e) => console.error(e));
+  console.log("res", res);
+
+  if (!res) throw new Error("ไม่สามารถเข้าถึงระบบยืนยันตัวตน");
+  if (!res.ok) {
+    throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่สามารถยืนยันตัวตนได้");
+  }
+
+  return await jwtDecode(token);
 }
