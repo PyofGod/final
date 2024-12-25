@@ -16,11 +16,7 @@ import {
 import Express from "express";
 import HttpError from "../interfaces/http-error";
 import HttpStatus from "../interfaces/http-status";
-
-export interface Fruits {
-  name: string;
-  color: string;
-}
+import { Fruits } from "../model/Fruits";
 
 @Route("fruits")
 export class fruitController extends Controller {

@@ -27,7 +27,6 @@
     "node-fetch-commonjs": "^3.3.2",
     "promise-any": "^0.2.0",
     "swagger-ui-express": "^5.0.1",
-    "tsoa": "^6.6.0",
     "typedoc": "^0.27.2"
   },
   "devDependencies": {
@@ -40,6 +39,7 @@
     "nodemon": "^3.1.9",
     "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
+    "tsoa": "^6.6.0",
     "typescript": "^5.7.2"
   },
   "description": ""

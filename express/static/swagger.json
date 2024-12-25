@@ -42,6 +42,445 @@
 		"contact": {}
 	},
 	"paths": {
+		"/products": {
+			"get": {
+				"operationId": "GetProducts",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"UnitsOnOrder": {
+												"type": "number",
+												"format": "double"
+											},
+											"UnitsInStock": {
+												"type": "number",
+												"format": "double"
+											},
+											"UnitPrice": {
+												"type": "string"
+											},
+											"SupplierId": {
+												"type": "number",
+												"format": "double"
+											},
+											"ReorderLevel": {
+												"type": "number",
+												"format": "double"
+											},
+											"QuantityPerUnit": {
+												"type": "string"
+											},
+											"Discontinued": {
+												"type": "number",
+												"format": "double"
+											},
+											"Categories": {
+												"type": "string"
+											},
+											"ProductName": {
+												"type": "string"
+											},
+											"id": {
+												"type": "number",
+												"format": "double"
+											}
+										},
+										"required": [
+											"UnitsOnOrder",
+											"UnitsInStock",
+											"UnitPrice",
+											"SupplierId",
+											"ReorderLevel",
+											"QuantityPerUnit",
+											"Discontinued",
+											"Categories",
+											"ProductName",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateProduct",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"UnitsOnOrder": {
+											"type": "number",
+											"format": "double"
+										},
+										"UnitsInStock": {
+											"type": "number",
+											"format": "double"
+										},
+										"UnitPrice": {
+											"type": "string"
+										},
+										"SupplierId": {
+											"type": "number",
+											"format": "double"
+										},
+										"ReorderLevel": {
+											"type": "number",
+											"format": "double"
+										},
+										"QuantityPerUnit": {
+											"type": "string"
+										},
+										"Discontinued": {
+											"type": "number",
+											"format": "double"
+										},
+										"Categories": {
+											"type": "string"
+										},
+										"ProductName": {
+											"type": "string"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"UnitsOnOrder",
+										"UnitsInStock",
+										"UnitPrice",
+										"SupplierId",
+										"ReorderLevel",
+										"QuantityPerUnit",
+										"Discontinued",
+										"Categories",
+										"ProductName",
+										"id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"UnitsOnOrder": {
+										"type": "number",
+										"format": "double"
+									},
+									"UnitsInStock": {
+										"type": "number",
+										"format": "double"
+									},
+									"UnitPrice": {
+										"type": "string"
+									},
+									"SupplierId": {
+										"type": "number",
+										"format": "double"
+									},
+									"ReorderLevel": {
+										"type": "number",
+										"format": "double"
+									},
+									"QuantityPerUnit": {
+										"type": "string"
+									},
+									"Discontinued": {
+										"type": "number",
+										"format": "double"
+									},
+									"Categories": {
+										"type": "string"
+									},
+									"ProductName": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"UnitsOnOrder",
+									"UnitsInStock",
+									"UnitPrice",
+									"SupplierId",
+									"ReorderLevel",
+									"Discontinued",
+									"Categories",
+									"ProductName"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/products/{id}": {
+			"get": {
+				"operationId": "GetProductById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"UnitsOnOrder": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitsInStock": {
+													"type": "number",
+													"format": "double"
+												},
+												"UnitPrice": {
+													"type": "string"
+												},
+												"SupplierId": {
+													"type": "number",
+													"format": "double"
+												},
+												"ReorderLevel": {
+													"type": "number",
+													"format": "double"
+												},
+												"QuantityPerUnit": {
+													"type": "string"
+												},
+												"Discontinued": {
+													"type": "number",
+													"format": "double"
+												},
+												"Categories": {
+													"type": "string"
+												},
+												"ProductName": {
+													"type": "string"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"UnitsOnOrder",
+												"UnitsInStock",
+												"UnitPrice",
+												"SupplierId",
+												"ReorderLevel",
+												"QuantityPerUnit",
+												"Discontinued",
+												"Categories",
+												"ProductName",
+												"id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateProduct",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"UnitsOnOrder": {
+											"type": "number",
+											"format": "double"
+										},
+										"UnitsInStock": {
+											"type": "number",
+											"format": "double"
+										},
+										"UnitPrice": {
+											"type": "string"
+										},
+										"SupplierId": {
+											"type": "number",
+											"format": "double"
+										},
+										"ReorderLevel": {
+											"type": "number",
+											"format": "double"
+										},
+										"QuantityPerUnit": {
+											"type": "string"
+										},
+										"Discontinued": {
+											"type": "number",
+											"format": "double"
+										},
+										"Categories": {
+											"type": "string"
+										},
+										"ProductName": {
+											"type": "string"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"UnitsOnOrder",
+										"UnitsInStock",
+										"UnitPrice",
+										"SupplierId",
+										"ReorderLevel",
+										"QuantityPerUnit",
+										"Discontinued",
+										"Categories",
+										"ProductName",
+										"id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"UnitsOnOrder": {
+										"type": "number",
+										"format": "double"
+									},
+									"UnitsInStock": {
+										"type": "number",
+										"format": "double"
+									},
+									"UnitPrice": {
+										"type": "string"
+									},
+									"SupplierId": {
+										"type": "number",
+										"format": "double"
+									},
+									"ReorderLevel": {
+										"type": "number",
+										"format": "double"
+									},
+									"QuantityPerUnit": {
+										"type": "string"
+									},
+									"Discontinued": {
+										"type": "number",
+										"format": "double"
+									},
+									"Categories": {
+										"type": "string"
+									},
+									"ProductName": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteProduct",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/fruits": {
 			"get": {
 				"operationId": "GetFruit",
@@ -60,7 +499,8 @@
 												"type": "string"
 											},
 											"id": {
-												"type": "string"
+												"type": "number",
+												"format": "double"
 											}
 										},
 										"required": [
@@ -95,7 +535,8 @@
 											"type": "string"
 										},
 										"id": {
-											"type": "string"
+											"type": "number",
+											"format": "double"
 										}
 									},
 									"required": [
@@ -146,7 +587,8 @@
 													"type": "string"
 												},
 												"id": {
-													"type": "string"
+													"type": "number",
+													"format": "double"
 												}
 											},
 											"required": [
@@ -184,37 +626,28 @@
 				"operationId": "UpdateFruit",
 				"responses": {
 					"200": {
-						"description": "Update",
+						"description": "Updated",
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"color": {
-													"type": "string"
-												},
-												"name": {
-													"type": "string"
-												},
-												"id": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"color",
-												"name",
-												"id"
-											],
-											"type": "object"
+									"properties": {
+										"color": {
+											"type": "string"
 										},
-										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
+										"name": {
+											"type": "string"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
 										}
-									]
+									},
+									"required": [
+										"color",
+										"name",
+										"id"
+									],
+									"type": "object"
 								}
 							}
 						}
@@ -250,20 +683,253 @@
 				"operationId": "DeleteFruit",
 				"responses": {
 					"200": {
-						"description": "Delete",
+						"description": "Deleted",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "string",
-									"enum": [
-										"ไม่พบข้อมูล",
-										"ลบข้อมูลสำเร็จ"
-									]
+									"type": "string"
 								}
 							}
 						}
 					}
 				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/categories": {
+			"get": {
+				"operationId": "GetCategories",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"description",
+											"name",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateCategory",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"id": {
+											"type": "number",
+											"format": "double"
+										},
+										"description": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"description",
+										"name"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a category",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"description": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"description",
+									"name"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/categories/{id}": {
+			"get": {
+				"operationId": "GetCategoryById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get category by ID",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateCategory",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"description": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"description",
+										"name"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a category",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"description": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"description",
+									"name"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteCategory",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete a category",
 				"security": [
 					{
 						"keycloak": []
