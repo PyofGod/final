@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import HttpService from "@/service/HttpService";
 
 interface Product {
-  CategoryId?: number;
+  CategoryId: number;
   Discontinued: number;
   Id?: number;
   ProductName: string;
@@ -15,86 +15,164 @@ interface Product {
   UnitsOnOrder: number;
 }
 
+const idProduct = ref<number | undefined>(undefined)
 const productList = ref<Product[]>([]);
-const newProduct = ref<Product>({
-  Discontinued: 0,
-  ProductName: '',
-  QuantityPerUnit: '',
-  ReorderLevel: 0,
-  SupplierId: 0,
-  UnitPrice: '',
-  UnitsInStock: 0,
-  UnitsOnOrder: 0,
-});
+const categories = ref<number>(0);
+const discontinued = ref<number>(0);
+const productName = ref<string>("");
+const quantityPerUnit = ref<string>("");
+const reorderLevel = ref<number>(0);
+const supplierId = ref<number>(0);
+const unitPrice = ref<string>("");
+const unitsInStock = ref<number>(0);
+const unitsOnOrder = ref<number>(0);
+const currentProductId = ref<number | null>(null); // เก็บ ID ของสินค้าที่กำลังแก้ไข
 
-const BASE_PATH = "http://192.168.1.140:4000"
+const BASE_PATH = "http://192.168.1.140:4000";
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
   productList.value = res.data;
 };
 
-loadProduct();
+const handleEditProduct = async (value: Product) => {
+  idProduct.value = value.Id
+  productName.value = value.ProductName;
+  unitsOnOrder.value = value.UnitsOnOrder;
+  unitsInStock.value = value.UnitsInStock;
+  unitPrice.value = value.UnitPrice;
+  supplierId.value = value.SupplierId;
+  reorderLevel.value = value.ReorderLevel;
+  quantityPerUnit.value = value.QuantityPerUnit;
+  discontinued.value = value.Discontinued;
+  categories.value = value.CategoryId;
+};
+const subMit = async () => {
+  if (idProduct.value !== undefined) {
+    try {
+      const response = await HttpService.getAxiosClient().patch(
+        `${BASE_PATH}/products/${idProduct.value}`, // ใช้ ID จาก currentProductId
+        {
+          UnitsOnOrder: unitsOnOrder.value,
+          UnitsInStock: unitsInStock.value,
+          UnitPrice: unitPrice.value,
+          SupplierId: supplierId.value,
+          ReorderLevel: reorderLevel.value,
+          QuantityPerUnit: quantityPerUnit.value,
+          Discontinued: discontinued.value,
+          CategoryId: categories.value,
+          ProductName: productName.value,
+        }
+      );
+      if (response.status === 200) {
+        await loadProduct(); // โหลดข้อมูลใหม่หลังจากแก้ไขสำเร็จ
+        console.log('Product updated successfully');
+        currentProductId.value = null; // รีเซ็ตหลังจากแก้ไขเสร็จ
+      }
+    } catch (error) {
+      console.log('Failed to update product', error);
+    }
+  } else {
+    try {
+      const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/products`, {
+        UnitsOnOrder: unitsOnOrder.value,
+        UnitsInStock: unitsInStock.value,
+        UnitPrice: unitPrice.value,
+        SupplierId: supplierId.value,
+        ReorderLevel: reorderLevel.value,
+        QuantityPerUnit: quantityPerUnit.value,
+        Discontinued: discontinued.value,
+        CategoryId: categories.value,
+        ProductName: productName.value,
+      });
+      if (res.status === 201) {
+        await loadProduct();
+        console.log('Product added successfully');
+      } else {
+        console.log('Failed to add product');
+      }
+    } catch (error) {
+      console.log('Failed to add product', error);
+    }
+  }
+  reset();
+}
 
-// ฟังก์ชันเพิ่มสินค้า
-const handleAddProduct = () => {
-  productList.value.push({ ...newProduct.value });
+const reset = async () => {
+  idProduct.value = undefined
+  productName.value = "";
+  unitsOnOrder.value = 0;
+  unitsInStock.value = 0;
+  unitPrice.value = "";
+  supplierId.value = 0;
+  reorderLevel.value = 0;
+  quantityPerUnit.value = "";
+  discontinued.value = 0;
+  categories.value = 0;
+}
+
+const handleDeleteProduct = async (index: number) => {
+  try {
+    const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/products/${index}`);
+    if (res.status === 200) {
+      await loadProduct(); // Reload fruits list
+      console.log('Product removed successfully');
+    } else {
+      console.log('Failed to remove product');
+    }
+  } catch (error) {
+    console.log('Failed to remove product', error);
+  }
 };
 
-// ฟังก์ชันลบสินค้า
-const handleDeleteProduct = (index) => {
-  productList.value.splice(index, 1); // ลบสินค้าตามตำแหน่งในรายการ
-};
-
-// ฟังก์ชันรีเซ็ตฟอร์ม
+onMounted(async () => {
+  await loadProduct();
+});
 </script>
 
 <template>
   <div class="product-page">
     <h1>Product List</h1>
-
-    <!-- ฟอร์มสำหรับเพิ่มสินค้า -->
-    <form @submit.prevent="handleAddProduct" class="product-form">
+    <form @submit.prevent="subMit" class="product-form">
       <div class="form-group">
         <label for="name">ProductName</label>
-        <input type="text" v-model="newProduct.ProductName" placeholder="..." required />
+        <input type="text" v-model="productName" placeholder="..." required />
       </div>
       <div class="form-group">
-        <label for="name">CategoryId</label>
-        <input type="text" v-model="newProduct.CategoryId" placeholder="..." required />
+        <label for="price">Categories</label>
+        <input type="text" v-model="categories" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="price">Discontinued</label>
-        <input type="number" v-model="newProduct.Discontinued" placeholder="..." required />
+        <input type="number" v-model="discontinued" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">QuantityPerUnit</label>
-        <input type="number" v-model="newProduct.QuantityPerUnit" placeholder="..." required />
+        <input type="text" v-model="quantityPerUnit" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">ReorderLevel</label>
-        <input type="text" v-model="newProduct.ReorderLevel" placeholder="..." required />
+        <input type="number" v-model="reorderLevel" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">SupplierId</label>
-        <input type="text" v-model="newProduct.SupplierId" placeholder="..." required />
+        <input type="number" v-model="supplierId" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">UnitPrice</label>
-        <input type="text" v-model="newProduct.UnitPrice" placeholder="..." required />
+        <input type="text" v-model="unitPrice" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">UnitsInStock</label>
-        <input type="text" v-model="newProduct.UnitsInStock" placeholder="..." required />
+        <input type="number" v-model="unitsInStock" placeholder="..." required />
       </div>
       <div class="form-group">
         <label for="category">UnitsOnOrder</label>
-        <input type="text" v-model="newProduct.UnitsOnOrder" placeholder="..." required />
+        <input type="number" v-model="unitsOnOrder" placeholder="..." required />
       </div>
       <button type="submit" class="btn-add">เพิ่มสินค้า</button>
     </form>
 
-    <!-- ตารางรายการสินค้า -->
     <div class="table-container">
       <table>
         <thead>
@@ -125,7 +203,11 @@ const handleDeleteProduct = (index) => {
             <td>{{ product.UnitsInStock }}</td>
             <td>{{ product.UnitsOnOrder }}</td>
             <td>
-              <button class="btn-delete" @click="handleDeleteProduct(index)">Delete</button>
+              <button class="btn-edit" @click="handleEditProduct(product)">Edit</button>
+            </td>
+            <td>
+              <button class="btn-delete"
+                @click="() => { if (product.Id !== undefined) handleDeleteProduct(product.Id) }">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -134,6 +216,9 @@ const handleDeleteProduct = (index) => {
   </div>
 </template>
 
+<style scoped>
+/* style เดิมตามที่คุณให้มา */
+</style>
 <style scoped>
 .product-page {
   max-width: auto;
@@ -228,5 +313,15 @@ tr:hover {
 
 .btn-delete:hover {
   background-color: #e41e20;
+}
+
+.btn-edit {
+  background-color: blue;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 </style>

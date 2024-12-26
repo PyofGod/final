@@ -1,38 +1,62 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import HttpService from "@/service/HttpService";
 
 interface Categories {
   name: string,
   description: string,
-  id: number,
+  Id?: number,
 }
 const categoriesList = ref<Categories[]>([]);
 const newCategories = ref<Categories>({
   name: '',
   description: '',
-  id: 0,
 });
 
 
 const BASE_PATH = "http://192.168.1.140:4000"
 
-const loadProduct = async () => {
+const loadData = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/categories`);
   categoriesList.value = res.data;
 };
 
-loadProduct();
-const addProduct = () => {
-  if (newCategories.value.name && newCategories.value.description) {
-    categoriesList.value.push({ ...newCategories.value });
-    newCategories.value = { description: '', name: '', id: 0 };
+const addProduct = async () => {
+  try {
+    const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/categories`, {
+      name: newCategories.value.name,
+      description: newCategories.value.description,
+    });
+    if (res) {
+      await loadData();
+      console.log('Fruit added successfully');
+      newCategories.value.name = '';
+      newCategories.value.description = '';
+    } else {
+      console.log('Failed to add fruit');
+    }
+  } catch (error) {
+    console.log('Failed to add fruit');
   }
 };
 
-const deleteProduct = (index) => {
-  categoriesList.value.splice(index, 1);
+const deleteProduct = async (Id: number) => {
+  try {
+    const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/categories/${Id}`);
+    if (res.status === 200) {
+      await loadData();
+      console.log('Product removed successfully');
+    } else {
+      console.log('Failed to remove product');
+    }
+  } catch (error) {
+    console.log('Failed to remove product', error);
+  }
 };
+
+onMounted(async () => {
+  await loadData();
+});
 </script>
 
 <template>
@@ -46,7 +70,7 @@ const deleteProduct = (index) => {
       </div>
       <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" v-model="newCategories.description" placeholder="Enter price" required />
+        <input type="text" v-model="newCategories.description" placeholder="Enter price" required />
       </div>
       <button type="submit" class="btn-add">Add Product</button>
     </form>
@@ -67,7 +91,7 @@ const deleteProduct = (index) => {
             <td>{{ categories.name }}</td>
             <td>{{ categories.description }}</td>
             <td>
-              <button class="btn-delete" @click="deleteProduct(index)">Delete</button>
+              <button class="btn-delete" @click="deleteProduct(categories.id)">Delete</button>
             </td>
           </tr>
         </tbody>
