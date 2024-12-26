@@ -79,13 +79,13 @@
 												"type": "number",
 												"format": "double"
 											},
-											"Categories": {
+											"CategoryId": {
 												"type": "string"
 											},
 											"ProductName": {
 												"type": "string"
 											},
-											"id": {
+											"Id": {
 												"type": "number",
 												"format": "double"
 											}
@@ -98,9 +98,9 @@
 											"ReorderLevel",
 											"QuantityPerUnit",
 											"Discontinued",
-											"Categories",
+											"CategoryId",
 											"ProductName",
-											"id"
+											"Id"
 										],
 										"type": "object"
 									},
@@ -148,13 +148,13 @@
 											"type": "number",
 											"format": "double"
 										},
-										"Categories": {
+										"CategoryId": {
 											"type": "string"
 										},
 										"ProductName": {
 											"type": "string"
 										},
-										"id": {
+										"Id": {
 											"type": "number",
 											"format": "double"
 										}
@@ -167,9 +167,9 @@
 										"ReorderLevel",
 										"QuantityPerUnit",
 										"Discontinued",
-										"Categories",
+										"CategoryId",
 										"ProductName",
-										"id"
+										"Id"
 									],
 									"type": "object"
 								}
@@ -215,7 +215,7 @@
 										"type": "number",
 										"format": "double"
 									},
-									"Categories": {
+									"CategoryId": {
 										"type": "string"
 									},
 									"ProductName": {
@@ -229,7 +229,7 @@
 									"SupplierId",
 									"ReorderLevel",
 									"Discontinued",
-									"Categories",
+									"CategoryId",
 									"ProductName"
 								],
 								"type": "object"
@@ -277,13 +277,13 @@
 													"type": "number",
 													"format": "double"
 												},
-												"Categories": {
+												"CategoryId": {
 													"type": "string"
 												},
 												"ProductName": {
 													"type": "string"
 												},
-												"id": {
+												"Id": {
 													"type": "number",
 													"format": "double"
 												}
@@ -296,9 +296,9 @@
 												"ReorderLevel",
 												"QuantityPerUnit",
 												"Discontinued",
-												"Categories",
+												"CategoryId",
 												"ProductName",
-												"id"
+												"Id"
 											],
 											"type": "object"
 										},
@@ -361,13 +361,13 @@
 											"type": "number",
 											"format": "double"
 										},
-										"Categories": {
+										"CategoryId": {
 											"type": "string"
 										},
 										"ProductName": {
 											"type": "string"
 										},
-										"id": {
+										"Id": {
 											"type": "number",
 											"format": "double"
 										}
@@ -380,9 +380,9 @@
 										"ReorderLevel",
 										"QuantityPerUnit",
 										"Discontinued",
-										"Categories",
+										"CategoryId",
 										"ProductName",
-										"id"
+										"Id"
 									],
 									"type": "object"
 								}
@@ -437,7 +437,7 @@
 										"type": "number",
 										"format": "double"
 									},
-									"Categories": {
+									"CategoryId": {
 										"type": "string"
 									},
 									"ProductName": {
@@ -498,7 +498,7 @@
 											"name": {
 												"type": "string"
 											},
-											"id": {
+											"Id": {
 												"type": "number",
 												"format": "double"
 											}
@@ -506,7 +506,7 @@
 										"required": [
 											"color",
 											"name",
-											"id"
+											"Id"
 										],
 										"type": "object"
 									},
@@ -534,7 +534,7 @@
 										"name": {
 											"type": "string"
 										},
-										"id": {
+										"Id": {
 											"type": "number",
 											"format": "double"
 										}
@@ -542,7 +542,7 @@
 									"required": [
 										"color",
 										"name",
-										"id"
+										"Id"
 									],
 									"type": "object"
 								}
@@ -586,7 +586,7 @@
 												"name": {
 													"type": "string"
 												},
-												"id": {
+												"Id": {
 													"type": "number",
 													"format": "double"
 												}
@@ -594,7 +594,7 @@
 											"required": [
 												"color",
 												"name",
-												"id"
+												"Id"
 											],
 											"type": "object"
 										},
@@ -637,7 +637,7 @@
 										"name": {
 											"type": "string"
 										},
-										"id": {
+										"Id": {
 											"type": "number",
 											"format": "double"
 										}
@@ -645,7 +645,7 @@
 									"required": [
 										"color",
 										"name",
-										"id"
+										"Id"
 									],
 									"type": "object"
 								}
@@ -710,6 +710,595 @@
 				]
 			}
 		},
+		"/employees": {
+			"get": {
+				"operationId": "GetEmployees",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"TitleOfCourtesy": {
+												"type": "string"
+											},
+											"Title": {
+												"type": "string"
+											},
+											"ReportsTo": {
+												"type": "number",
+												"format": "double"
+											},
+											"Region": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"PhotoPath": {
+												"type": "string"
+											},
+											"Photo": {
+												"type": "string"
+											},
+											"Notes": {
+												"type": "string"
+											},
+											"LastName": {
+												"type": "string"
+											},
+											"HomePhone": {
+												"type": "string"
+											},
+											"HireDate": {
+												"type": "string"
+											},
+											"FirstName": {
+												"type": "string"
+											},
+											"Extension": {
+												"type": "string"
+											},
+											"Country": {
+												"type": "string"
+											},
+											"City": {
+												"type": "string"
+											},
+											"BirthDate": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "number",
+												"format": "double"
+											}
+										},
+										"required": [
+											"TitleOfCourtesy",
+											"Title",
+											"ReportsTo",
+											"Region",
+											"PostalCode",
+											"PhotoPath",
+											"Photo",
+											"Notes",
+											"LastName",
+											"HomePhone",
+											"HireDate",
+											"FirstName",
+											"Extension",
+											"Country",
+											"City",
+											"BirthDate",
+											"Address",
+											"Id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateEmployee",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"TitleOfCourtesy": {
+											"type": "string"
+										},
+										"Title": {
+											"type": "string"
+										},
+										"ReportsTo": {
+											"type": "number",
+											"format": "double"
+										},
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"PhotoPath": {
+											"type": "string"
+										},
+										"Photo": {
+											"type": "string"
+										},
+										"Notes": {
+											"type": "string"
+										},
+										"LastName": {
+											"type": "string"
+										},
+										"HomePhone": {
+											"type": "string"
+										},
+										"HireDate": {
+											"type": "string"
+										},
+										"FirstName": {
+											"type": "string"
+										},
+										"Extension": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"BirthDate": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"TitleOfCourtesy",
+										"Title",
+										"ReportsTo",
+										"Region",
+										"PostalCode",
+										"PhotoPath",
+										"Photo",
+										"Notes",
+										"LastName",
+										"HomePhone",
+										"HireDate",
+										"FirstName",
+										"Extension",
+										"Country",
+										"City",
+										"BirthDate",
+										"Address",
+										"Id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"TitleOfCourtesy": {
+										"type": "string"
+									},
+									"Title": {
+										"type": "string"
+									},
+									"ReportsTo": {
+										"type": "number",
+										"format": "double"
+									},
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"PhotoPath": {
+										"type": "string"
+									},
+									"Photo": {
+										"type": "string"
+									},
+									"Notes": {
+										"type": "string"
+									},
+									"LastName": {
+										"type": "string"
+									},
+									"HomePhone": {
+										"type": "string"
+									},
+									"HireDate": {
+										"type": "string"
+									},
+									"FirstName": {
+										"type": "string"
+									},
+									"Extension": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"BirthDate": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/employees/{id}": {
+			"get": {
+				"operationId": "GetEmployeeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"TitleOfCourtesy": {
+													"type": "string"
+												},
+												"Title": {
+													"type": "string"
+												},
+												"ReportsTo": {
+													"type": "number",
+													"format": "double"
+												},
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"PhotoPath": {
+													"type": "string"
+												},
+												"Photo": {
+													"type": "string"
+												},
+												"Notes": {
+													"type": "string"
+												},
+												"LastName": {
+													"type": "string"
+												},
+												"HomePhone": {
+													"type": "string"
+												},
+												"HireDate": {
+													"type": "string"
+												},
+												"FirstName": {
+													"type": "string"
+												},
+												"Extension": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"TitleOfCourtesy",
+												"Title",
+												"ReportsTo",
+												"Region",
+												"PostalCode",
+												"PhotoPath",
+												"Photo",
+												"Notes",
+												"LastName",
+												"HomePhone",
+												"HireDate",
+												"FirstName",
+												"Extension",
+												"Country",
+												"City",
+												"BirthDate",
+												"Address",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"ไม่พบข้อมูล"
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateEmployee",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"TitleOfCourtesy": {
+											"type": "string"
+										},
+										"Title": {
+											"type": "string"
+										},
+										"ReportsTo": {
+											"type": "number",
+											"format": "double"
+										},
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"PhotoPath": {
+											"type": "string"
+										},
+										"Photo": {
+											"type": "string"
+										},
+										"Notes": {
+											"type": "string"
+										},
+										"LastName": {
+											"type": "string"
+										},
+										"HomePhone": {
+											"type": "string"
+										},
+										"HireDate": {
+											"type": "string"
+										},
+										"FirstName": {
+											"type": "string"
+										},
+										"Extension": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"BirthDate": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"TitleOfCourtesy",
+										"Title",
+										"ReportsTo",
+										"Region",
+										"PostalCode",
+										"PhotoPath",
+										"Photo",
+										"Notes",
+										"LastName",
+										"HomePhone",
+										"HireDate",
+										"FirstName",
+										"Extension",
+										"Country",
+										"City",
+										"BirthDate",
+										"Address",
+										"Id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"TitleOfCourtesy": {
+										"type": "string"
+									},
+									"Title": {
+										"type": "string"
+									},
+									"ReportsTo": {
+										"type": "number",
+										"format": "double"
+									},
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"PhotoPath": {
+										"type": "string"
+									},
+									"Photo": {
+										"type": "string"
+									},
+									"Notes": {
+										"type": "string"
+									},
+									"LastName": {
+										"type": "string"
+									},
+									"HomePhone": {
+										"type": "string"
+									},
+									"HireDate": {
+										"type": "string"
+									},
+									"FirstName": {
+										"type": "string"
+									},
+									"Extension": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"BirthDate": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteEmployee",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/categories": {
 			"get": {
 				"operationId": "GetCategories",
@@ -727,14 +1316,14 @@
 											"name": {
 												"type": "string"
 											},
-											"id": {
+											"Id": {
 												"type": "string"
 											}
 										},
 										"required": [
 											"description",
 											"name",
-											"id"
+											"Id"
 										],
 										"type": "object"
 									},

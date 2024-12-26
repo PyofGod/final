@@ -30,7 +30,7 @@ export class fruitController extends Controller {
   public async getFruitById(@Path() id: string) {
     const idNumber = parseInt(id, 10); // แปลง id เป็น number
     const fruit = await prisma.fruit.findFirst({
-      where: { id: idNumber },
+      where: { Id: idNumber },
     });
     return fruit || "ไม่พบข้อมูล";
   }
@@ -64,7 +64,7 @@ export class fruitController extends Controller {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
     }
     const fruit = await prisma.fruit.update({
-      where: { id: idNumber },
+      where: { Id: idNumber },
       data: requestBody,
     });
     return fruit;
@@ -82,7 +82,7 @@ export class fruitController extends Controller {
     if (!isAdmin) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
     }
-    await prisma.fruit.delete({ where: { id: idNumber } });
+    await prisma.fruit.delete({ where: { Id: idNumber } });
     return "ลบข้อมูลสำเร็จ";
   }
 }

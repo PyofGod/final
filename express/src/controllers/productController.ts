@@ -31,11 +31,11 @@ export class ProductController extends Controller {
     // ดึงข้อมูล Product ตาม ID โดยเลือกเฉพาะคอลัมน์ที่ต้องการ
     const idNumber = parseInt(id, 10);
     const product = await prisma.product.findFirst({
-      where: { id: idNumber },
+      where: { Id: idNumber },
       select: {
-        id: true,
+        Id: true,
         ProductName: true,
-        Categories: true,
+        CategoryId: true,
         Discontinued: true,
         QuantityPerUnit: true,
         ReorderLevel: true,
@@ -56,7 +56,7 @@ export class ProductController extends Controller {
     @Body()
     requestBody: {
       ProductName: string;
-      Categories: string;
+      CategoryId: string;
       Discontinued: number;
       QuantityPerUnit?: string;
       ReorderLevel: number;
@@ -74,7 +74,7 @@ export class ProductController extends Controller {
     const product = await prisma.product.create({
       data: {
         ProductName: requestBody.ProductName,
-        Categories: requestBody.Categories,
+        CategoryId: requestBody.CategoryId,
         Discontinued: requestBody.Discontinued,
         QuantityPerUnit: requestBody.QuantityPerUnit,
         ReorderLevel: requestBody.ReorderLevel,
@@ -96,7 +96,7 @@ export class ProductController extends Controller {
     @Body()
     requestBody: {
       ProductName?: string;
-      Categories?: string;
+      CategoryId?: string;
       Discontinued?: number;
       QuantityPerUnit?: string;
       ReorderLevel?: number;
@@ -113,7 +113,7 @@ export class ProductController extends Controller {
     }
 
     const product = await prisma.product.update({
-      where: { id: idNumber },
+      where: { Id: idNumber },
       data: requestBody,
     });
     return product;
@@ -132,7 +132,7 @@ export class ProductController extends Controller {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
     }
 
-    await prisma.product.delete({ where: { id: idNumber } });
+    await prisma.product.delete({ where: { Id: idNumber } });
     return "ลบข้อมูลสำเร็จ";
   }
 }
