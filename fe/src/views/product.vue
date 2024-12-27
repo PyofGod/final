@@ -140,50 +140,60 @@ onMounted(async () => {
 });
 </script>
 
+
 <template>
   <div class="product-page">
     <h1>Product List</h1>
     <form @submit.prevent="subMit" class="product-form">
       <div class="form-group">
-        <label for="name">ProductName</label>
-        <input type="text" v-model="productName" placeholder="..." required />
+        <label for="productName">ชื่อสินค้า</label>
+        <input type="text" v-model="productName" placeholder="กรอกชื่อสินค้า" required />
       </div>
       <div class="form-group">
-        <label for="categories">Categories</label>
+        <label for="categories">หมวดหมู่</label>
         <select v-model="categories" required>
-          <option value="" disabled>-- Select Category --</option>
-          <option v-for="category in categoriesList" :key="category.Id" :value="category.name">
+          <option value="" disabled>-- เลือกหมวดหมู่ --</option>
+          <option v-for="category in categoriesList" :key="category.Id" :value="category.Id">
             {{ category.name }}
           </option>
         </select>
       </div>
       <div class="form-group">
-        <label for="price">Discontinued</label>
-        <input type="number" v-model="discontinued" placeholder="..." required />
+        <label for="discontinued">สถานะสินค้า</label>
+        <div class="status-group">
+          <label>
+            <input type="radio" v-model="discontinued" value="1" required />
+            ขายอยู่
+          </label>
+          <label>
+            <input type="radio" v-model="discontinued" value="0" required />
+            หมดแล้ว
+          </label>
+        </div>
       </div>
       <div class="form-group">
-        <label for="category">QuantityPerUnit</label>
-        <input type="text" v-model="quantityPerUnit" placeholder="..." required />
+        <label for="quantityPerUnit">จำนวนต่อหน่วย</label>
+        <input type="text" v-model="quantityPerUnit" placeholder="กรอกจำนวนต่อหน่วย" required />
       </div>
       <div class="form-group">
-        <label for="category">ReorderLevel</label>
-        <input type="number" v-model="reorderLevel" placeholder="..." required />
+        <label for="reorderLevel">ระดับการสั่งซื้อ</label>
+        <input type="number" v-model="reorderLevel" placeholder="กรอกระดับการสั่งซื้อ" required />
       </div>
       <div class="form-group">
-        <label for="category">SupplierId</label>
-        <input type="number" v-model="supplierId" placeholder="..." required />
+        <label for="supplierId">รหัสผู้จัดจำหน่าย</label>
+        <input type="number" v-model="supplierId" placeholder="กรอกรหัสผู้จัดจำหน่าย" required />
       </div>
       <div class="form-group">
-        <label for="category">UnitPrice</label>
-        <input type="text" v-model="unitPrice" placeholder="..." required />
+        <label for="unitPrice">ราคาต่อหน่วย</label>
+        <input type="text" v-model="unitPrice" placeholder="กรอกราคาต่อหน่วย" required />
       </div>
       <div class="form-group">
-        <label for="category">UnitsInStock</label>
-        <input type="number" v-model="unitsInStock" placeholder="..." required />
+        <label for="unitsInStock">จำนวนสินค้าในสต็อก</label>
+        <input type="number" v-model="unitsInStock" placeholder="กรอกจำนวนสินค้าในสต็อก" required />
       </div>
       <div class="form-group">
-        <label for="category">UnitsOnOrder</label>
-        <input type="number" v-model="unitsOnOrder" placeholder="..." required />
+        <label for="unitsOnOrder">จำนวนสินค้าที่สั่ง</label>
+        <input type="number" v-model="unitsOnOrder" placeholder="กรอกจำนวนสินค้าที่สั่ง" required />
       </div>
       <button type="submit" class="btn-add">เพิ่มสินค้า</button>
     </form>
@@ -193,16 +203,16 @@ onMounted(async () => {
         <thead>
           <tr>
             <th>Id</th>
-            <th>ProductName</th>
-            <th>CategoryId</th>
-            <th>Discontinued</th>
-            <th>QuantityPerUnit</th>
-            <th>ReorderLevel</th>
-            <th>SupplierId</th>
-            <th>UnitPrice</th>
-            <th>UnitsInStock</th>
-            <th>UnitsOnOrder</th>
-            <th>Action</th>
+            <th>ชื่อสินค้า</th>
+            <th>หมวดหมู่</th>
+            <th>สถานะสินค้า</th>
+            <th>จำนวนต่อหน่วย</th>
+            <th>ระดับการสั่งซื้อ</th>
+            <th>รหัสผู้จัดจำหน่าย</th>
+            <th>ราคาต่อหน่วย</th>
+            <th>จำนวนสินค้าในสต็อก</th>
+            <th>จำนวนสินค้าที่สั่ง</th>
+            <th>การดำเนินการ</th>
           </tr>
         </thead>
         <tbody>
@@ -210,7 +220,7 @@ onMounted(async () => {
             <td>{{ index + 1 }}</td>
             <td>{{ product.ProductName }}</td>
             <td>{{ product.CategoryId }}</td>
-            <td>{{ product.Discontinued }}</td>
+            <td>{{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}</td>
             <td>{{ product.QuantityPerUnit }}</td>
             <td>{{ product.ReorderLevel }}</td>
             <td>{{ product.SupplierId }}</td>
@@ -218,9 +228,11 @@ onMounted(async () => {
             <td>{{ product.UnitsInStock }}</td>
             <td>{{ product.UnitsOnOrder }}</td>
             <td>
-              <button class="btn-edit" @click="handleEditProduct(product)">Edit</button>
-              <button class="btn-delete"
-                @click="() => { if (product.Id !== undefined) handleDeleteProduct(product.Id) }">Delete</button>
+              <div class="action-buttons">
+                <button class="btn-edit" @click="handleEditProduct(product)">แก้ไข</button>
+                <button class="btn-delete"
+                  @click="() => { if (product.Id !== undefined) handleDeleteProduct(product.Id) }">ลบ</button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -230,30 +242,29 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-/* style เดิมตามที่คุณให้มา */
-</style>
-<style scoped>
 .product-page {
   max-width: auto;
   margin: 40px auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #333;
-  background-color: #f9f9f9;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 h1 {
   text-align: center;
   color: #4CAF50;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
 }
 
 .product-form {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .form-group {
@@ -265,99 +276,128 @@ h1 {
 label {
   font-weight: bold;
   margin-bottom: 5px;
+  color: #333;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+input,
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.btn-add,
+.btn-edit,
+.btn-delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
 .btn-add {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  align-self: center;
+  background-color: #6C63FF;
 }
 
 .btn-add:hover {
-  background-color: #45a049;
+  background-color: #5a54e4;
+}
+
+.btn-edit {
+  background-color: #00bcd4;
+}
+
+.btn-edit:hover {
+  background-color: #00a1b1;
+}
+
+.btn-delete {
+  background-color: #ff4081;
+}
+
+.btn-delete:hover {
+  background-color: #f50057;
 }
 
 .table-container {
+  margin-top: 40px;
   overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 th,
 td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+  /* ลดขนาดฟอนต์ของหัวตาราง */
+  color: #333;
 }
 
 th {
   background-color: #f2f2f2;
-  color: #333;
+  font-weight: 600;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
 }
 
 tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f9f9f9;
 }
 
-.btn-delete {
-  background-color: #f44336;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.action-buttons {
+  display: flex;
+  gap: 10px;
 }
 
-.btn-delete:hover {
-  background-color: #e41e20;
+.status-group {
+  display: flex;
+  gap: 20px;
 }
 
-.btn-edit {
-  margin-bottom: 10px;
-  background-color: blue;
-  color: white;
-  padding: 5px 17px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.status-group label {
+  font-size: 1rem;
 }
 
-select {
-  padding: 9px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font-size: 16px;
-}
+@media (max-width: 768px) {
+  .product-form {
+    grid-template-columns: 1fr;
+  }
 
-select:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-select option {
-  padding: 10px;
-  font-size: 16px;
+  .btn-add,
+  .btn-edit,
+  .btn-delete {
+    width: 100%;
+    padding: 12px 0;
+  }
 }
 </style>

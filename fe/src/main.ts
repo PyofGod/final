@@ -13,6 +13,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
-KeyCloakService.CallLogin(App);
+KeyCloakService.CallLogin(() => {
+  app.mount('#app')
+});
 HttpService.configureAxiosKeycloak();

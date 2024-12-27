@@ -50,16 +50,6 @@ const loadEmployee = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);
   employeeList.value = res.data;
 };
-// const loadEmployee = async () => {
-//   try {
-//     const res = await HttpService.getAxiosClient().get(
-//       `${BASE_PATH}/employees`
-//     );
-//     employeeList.value = res.data;
-//   } catch (error) {
-//     console.error("Failed to load employees:", error);
-//   }
-// };
 
 const handleEditEmployee = async (value: Employee) => {
   idEmployee.value = value.Id;
@@ -194,154 +184,92 @@ onMounted(async () => {
 
 <template>
   <div class="employee-page">
-    <h1>Employee List</h1>
+    <h1>รายชื่อพนักงาน</h1>
     <form @submit.prevent="subMit" class="employee-form">
       <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input
-          type="text"
-          v-model="firstName"
-          placeholder="Enter First Name"
-          required
-        />
+        <label for="firstName">ชื่อ</label>
+        <input type="text" v-model="firstName" placeholder="กรอกชื่อ" required />
       </div>
       <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input
-          type="text"
-          v-model="lastName"
-          placeholder="Enter Last Name"
-          required
-        />
+        <label for="lastName">นามสกุล</label>
+        <input type="text" v-model="lastName" placeholder="กรอกนามสกุล" required />
       </div>
       <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" v-model="title" placeholder="Enter Title" required />
+        <label for="title">ตำแหน่ง</label>
+        <input type="text" v-model="title" placeholder="กรอกตำแหน่ง" required />
       </div>
       <div class="form-group">
-        <label for="titleOfCourtesy">Title Of Courtesy</label>
-        <input
-          type="text"
-          v-model="titleOfCourtesy"
-          placeholder="Enter Courtesy Title"
-          required
-        />
+        <label for="titleOfCourtesy">ตำแหน่งเกียรติยศ</label>
+        <input type="text" v-model="titleOfCourtesy" placeholder="กรอกตำแหน่งเกียรติยศ" required />
       </div>
       <div class="form-group">
-        <label for="birthDate">Birth Date</label>
+        <label for="birthDate">วันเกิด</label>
         <input type="date" v-model="birthDate" required />
       </div>
       <div class="form-group">
-        <label for="hireDate">Hire Date</label>
+        <label for="hireDate">วันเข้าทำงาน</label>
         <input type="date" v-model="hireDate" required />
       </div>
       <div class="form-group">
-        <label for="address">Address</label>
-        <input
-          type="text"
-          v-model="address"
-          placeholder="Enter Address"
-          required
-        />
+        <label for="address">ที่อยู่</label>
+        <input type="text" v-model="address" placeholder="กรอกที่อยู่" required />
       </div>
       <div class="form-group">
-        <label for="city">City</label>
-        <input type="text" v-model="city" placeholder="Enter City" required />
+        <label for="city">เมือง</label>
+        <input type="text" v-model="city" placeholder="กรอกเมือง" required />
       </div>
       <div class="form-group">
-        <label for="region">Region</label>
-        <input
-          type="text"
-          v-model="region"
-          placeholder="Enter Region"
-          required
-        />
+        <label for="region">ภาค</label>
+        <input type="text" v-model="region" placeholder="กรอกภาค" required />
       </div>
       <div class="form-group">
-        <label for="postalCode">Postal Code</label>
-        <input
-          type="text"
-          v-model="postalCode"
-          placeholder="Enter Postal Code"
-          required
-        />
+        <label for="postalCode">รหัสไปรษณีย์</label>
+        <input type="text" v-model="postalCode" placeholder="กรอกรหัสไปรษณีย์" required />
       </div>
       <div class="form-group">
-        <label for="country">Country</label>
-        <input
-          type="text"
-          v-model="country"
-          placeholder="Enter Country"
-          required
-        />
+        <label for="country">ประเทศ</label>
+        <input type="text" v-model="country" placeholder="กรอกประเทศ" required />
       </div>
       <div class="form-group">
-        <label for="homePhone">Home Phone</label>
-        <input
-          type="text"
-          v-model="homePhone"
-          placeholder="Enter Home Phone
-        "
-          required
-        />
+        <label for="homePhone">เบอร์โทรศัพท์</label>
+        <input type="text" v-model="homePhone" placeholder="กรอกเบอร์โทรศัพท์" required />
       </div>
       <div class="form-group">
-        <label for="extension">Extension</label>
-        <input
-          type="text"
-          v-model="extension"
-          placeholder="Enter Extension"
-          required
-        />
+        <label for="extension">ต่อ</label>
+        <input type="text" v-model="extension" placeholder="กรอกหมายเลขต่อ" required />
       </div>
       <div class="form-group">
-        <label for="photo">Photo</label>
-        <input
-          type="text"
-          v-model="photo"
-          placeholder="Enter Photo URL"
-          required
-        />
+        <label for="photo">รูปภาพ</label>
+        <input type="text" v-model="photo" placeholder="กรอก URL รูปภาพ" required />
       </div>
       <div class="form-group">
-        <label for="notes">Notes</label>
-        <textarea v-model="notes" placeholder="Enter Notes" required></textarea>
+        <label for="notes">หมายเหตุ</label>
+        <textarea v-model="notes" placeholder="กรอกหมายเหตุ" required></textarea>
       </div>
       <div class="form-group">
-        <label for="reportsTo">Reports To</label>
-        <input
-          type="number"
-          v-model="reportsTo"
-          placeholder="Enter Reports To ID"
-          required
-        />
+        <label for="reportsTo">รายงานถึง</label>
+        <input type="number" v-model="reportsTo" placeholder="กรอกหมายเลขผู้รายงานถึง" required />
       </div>
       <div class="form-group">
-        <label for="photoPath">Photo Path</label>
-        <input
-          type="text"
-          v-model="photoPath"
-          placeholder="Enter Photo Path"
-          required
-        />
+        <label for="photoPath">เส้นทางรูปภาพ</label>
+        <input type="text" v-model="photoPath" placeholder="กรอกเส้นทางรูปภาพ" required />
       </div>
-      <button type="submit" class="btn-add">Add / Update Employee</button>
+      <button type="submit" class="btn-add">เพิ่ม / แก้ไข พนักงาน</button>
     </form>
-
     <div class="table-container">
       <table>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Title</th>
-            <th>Courtesy</th>
-            <th>Birth Date</th>
-            <th>Hire Date</th>
-            <th>City</th>
-            <th>Country</th>
-            <th>Actions</th>
+            <th>รหัส</th>
+            <th>ชื่อ</th>
+            <th>นามสกุล</th>
+            <th>ตำแหน่ง</th>
+            <th>ตำแหน่งเกียรติยศ</th>
+            <th>วันเกิด</th>
+            <th>วันเข้าทำงาน</th>
+            <th>เมือง</th>
+            <th>ประเทศ</th>
+            <th>การกระทำ</th>
           </tr>
         </thead>
         <tbody>
@@ -357,18 +285,14 @@ onMounted(async () => {
             <td>{{ employee.Country }}</td>
             <td>
               <button class="btn-edit" @click="handleEditEmployee(employee)">
-                Edit
+                แก้ไข
               </button>
-              <button
-                class="btn-delete"
-                @click="
-                  () => {
-                    if (employee.Id !== undefined)
-                      handleDeleteEmployee(employee.Id);
-                  }
-                "
-              >
-                Delete
+              <button class="btn-delete" @click="() => {
+                if (employee.Id !== undefined)
+                  handleDeleteEmployee(employee.Id);
+              }
+                ">
+                ลบ
               </button>
             </td>
           </tr>
@@ -378,57 +302,84 @@ onMounted(async () => {
   </div>
 </template>
 
+
 <style scoped>
 .employee-page {
-  max-width: auto;
+  max-width: 1200px;
   margin: 40px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
 h1 {
   text-align: center;
-  color: #4caf50;
+  color: #008CBA;
+  /* ใช้สีฟ้าเหมือนหน้า Customer */
+  font-size: 2rem;
+  margin-bottom: 30px;
 }
 
 .employee-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .form-group {
-  flex: 1 1 calc(50% - 15px);
+  flex: 1 1 calc(50% - 20px);
   display: flex;
   flex-direction: column;
 }
 
 label {
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
 }
 
 input,
 textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+input[type="date"] {
+  padding-left: 8px;
+}
+
+textarea {
+  resize: none;
+  height: 100px;
+}
+
+textarea:focus,
+input:focus {
+  border-color: #008CBA;
+  /* ใช้สีฟ้าเหมือนหน้า Customer */
+  outline: none;
 }
 
 .btn-add {
-  background-color: #4caf50;
+  background-color: #4CAF50;
+  /* สีเขียว */
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 16px;
   align-self: center;
+  margin-top: 10px;
 }
 
 .btn-add:hover {
@@ -437,38 +388,46 @@ textarea {
 
 .table-container {
   overflow-x: auto;
+  margin-top: 40px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 th,
 td {
-  padding: 12px;
+  padding: 14px;
   text-align: left;
+  font-size: 14px;
   border-bottom: 1px solid #ddd;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #f3f3f3;
+  font-weight: bold;
   color: #333;
 }
 
 tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f9f9f9;
+}
+
+.btn-delete,
+.btn-edit {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
 
 .btn-delete {
   background-color: #f44336;
+  /* สีแดง */
   color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .btn-delete:hover {
@@ -476,18 +435,44 @@ tr:hover {
 }
 
 .btn-edit {
-  margin-bottom: 10px;
-  background-color: blue;
+  background-color: #008CBA;
+  /* สีฟ้าเหมือนหน้า Customer */
   color: white;
-  padding: 5px 17px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-textarea {
-  resize: none;
-  height: 80px;
+.btn-edit:hover {
+  background-color: #007bb5;
+}
+
+button {
+  margin-right: 10px;
+}
+
+.table-container th,
+.table-container td {
+  text-align: left;
+  padding: 12px 10px;
+}
+
+.table-container th,
+.table-container td {
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+@media (max-width: 768px) {
+  .employee-form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-add,
+  .btn-edit,
+  .btn-delete {
+    width: 100%;
+    padding: 12px 0;
+  }
 }
 </style>
