@@ -15,8 +15,15 @@ interface Product {
   UnitsOnOrder: number;
 }
 
+interface Categories {
+  Id: number,
+  name: string,
+  description: string
+}
+
 const idProduct = ref<number | undefined>(undefined)
 const productList = ref<Product[]>([]);
+const categoriesList = ref<Categories[]>([]);
 const categories = ref<number>(0);
 const discontinued = ref<number>(0);
 const productName = ref<string>("");
@@ -26,7 +33,6 @@ const supplierId = ref<number>(0);
 const unitPrice = ref<string>("");
 const unitsInStock = ref<number>(0);
 const unitsOnOrder = ref<number>(0);
-const currentProductId = ref<number | null>(null); // เก็บ ID ของสินค้าที่กำลังแก้ไข
 
 const BASE_PATH = "http://192.168.1.140:4000";
 
@@ -34,6 +40,11 @@ const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
   productList.value = res.data;
 };
+
+const loadCategory = async () => {
+  const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/categories`);
+  categoriesList.value = res.data;
+}
 
 const handleEditProduct = async (value: Product) => {
   idProduct.value = value.Id
@@ -51,7 +62,7 @@ const subMit = async () => {
   if (idProduct.value !== undefined) {
     try {
       const response = await HttpService.getAxiosClient().patch(
-        `${BASE_PATH}/products/${idProduct.value}`, // ใช้ ID จาก currentProductId
+        `${BASE_PATH}/products/${idProduct.value}`,
         {
           UnitsOnOrder: unitsOnOrder.value,
           UnitsInStock: unitsInStock.value,
@@ -65,9 +76,7 @@ const subMit = async () => {
         }
       );
       if (response.status === 200) {
-        await loadProduct(); // โหลดข้อมูลใหม่หลังจากแก้ไขสำเร็จ
-        console.log('Product updated successfully');
-        currentProductId.value = null; // รีเซ็ตหลังจากแก้ไขเสร็จ
+        await loadProduct();
       }
     } catch (error) {
       console.log('Failed to update product', error);
@@ -127,6 +136,7 @@ const handleDeleteProduct = async (index: number) => {
 
 onMounted(async () => {
   await loadProduct();
+  await loadCategory();
 });
 </script>
 
@@ -139,8 +149,13 @@ onMounted(async () => {
         <input type="text" v-model="productName" placeholder="..." required />
       </div>
       <div class="form-group">
-        <label for="price">Categories</label>
-        <input type="text" v-model="categories" placeholder="..." required />
+        <label for="categories">Categories</label>
+        <select v-model="categories" required>
+          <option value="" disabled>-- Select Category --</option>
+          <option v-for="category in categoriesList" :key="category.Id" :value="category.name">
+            {{ category.name }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <label for="price">Discontinued</label>
@@ -204,8 +219,6 @@ onMounted(async () => {
             <td>{{ product.UnitsOnOrder }}</td>
             <td>
               <button class="btn-edit" @click="handleEditProduct(product)">Edit</button>
-            </td>
-            <td>
               <button class="btn-delete"
                 @click="() => { if (product.Id !== undefined) handleDeleteProduct(product.Id) }">Delete</button>
             </td>
@@ -316,12 +329,35 @@ tr:hover {
 }
 
 .btn-edit {
+  margin-bottom: 10px;
   background-color: blue;
   color: white;
-  padding: 5px 10px;
+  padding: 5px 17px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+select {
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 16px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+select option {
+  padding: 10px;
+  font-size: 16px;
 }
 </style>
