@@ -19,29 +19,33 @@ import HttpStatus from "../interfaces/http-status";
 
 @Route("employees")
 export class EmployeeController extends Controller {
+  /**
+   * Get all employees
+   */
   @Get()
   @Security("keycloak")
   public async getEmployees(
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    const isAdmin = req.user.role.includes("admin");
-    if (!isAdmin) {
-      throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
+    if (!req.user.role.includes("admin")) {
+      throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const employees = await prisma.employee.findMany();
-    return employees;
+    return prisma.employee.findMany();
   }
 
+  /**
+   * Get employee by ID
+   * @param id
+   */
   @Get("{id}")
   @Security("keycloak")
   public async getEmployeeById(
     @Path() id: string,
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    const isAdmin = req.user.role.includes("admin");
-    if (!isAdmin) {
-      throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
+    if (!req.user.role.includes("admin")) {
+      throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
     const idNumber = parseInt(id, 10);
@@ -68,9 +72,12 @@ export class EmployeeController extends Controller {
         TitleOfCourtesy: true,
       },
     });
-    return employee || "ไม่พบข้อมูล";
+    return employee || { message: "Employee not found" };
   }
 
+  /**
+   * Create a new employee
+   */
   @Post()
   @Security("keycloak")
   @SuccessResponse("201", "Created")
@@ -97,17 +104,19 @@ export class EmployeeController extends Controller {
       TitleOfCourtesy?: string;
     }
   ) {
-    const isAdmin = req.user.role.includes("admin");
-    if (!isAdmin) {
-      throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
+    if (!req.user.role.includes("admin")) {
+      throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const employee = await prisma.employee.create({
+    return prisma.employee.create({
       data: requestBody,
     });
-    return employee;
   }
 
+  /**
+   * Update employee by ID
+   * @param id
+   */
   @Patch("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Updated")
@@ -135,19 +144,21 @@ export class EmployeeController extends Controller {
       TitleOfCourtesy?: string;
     }
   ) {
-    const idNumber = parseInt(id, 10);
-    const isAdmin = req.user.role.includes("admin");
-    if (!isAdmin) {
-      throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
+    if (!req.user.role.includes("admin")) {
+      throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const employee = await prisma.employee.update({
+    const idNumber = parseInt(id, 10);
+    return prisma.employee.update({
       where: { Id: idNumber },
       data: requestBody,
     });
-    return employee;
   }
 
+  /**
+   * Delete employee by ID
+   * @param id
+   */
   @Delete("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Deleted")
@@ -155,13 +166,12 @@ export class EmployeeController extends Controller {
     @Path() id: string,
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    const idNumber = parseInt(id, 10);
-    const isAdmin = req.user.role.includes("admin");
-    if (!isAdmin) {
-      throw new HttpError(HttpStatus.UNAUTHORIZED, "ไม่อนุญาต");
+    if (!req.user.role.includes("admin")) {
+      throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
+    const idNumber = parseInt(id, 10);
     await prisma.employee.delete({ where: { Id: idNumber } });
-    return "ลบข้อมูลสำเร็จ";
+    return { message: "Employee deleted successfully" };
   }
 }

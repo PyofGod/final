@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import HttpService from "@/service/HttpService";
 
 interface Employee {
@@ -47,13 +47,19 @@ const photoPath = ref<string>("");
 const BASE_PATH = "http://192.168.1.140:4000";
 
 const loadEmployee = async () => {
-  try {
-    const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);
-    employeeList.value = res.data;
-  } catch (error) {
-    console.error("Failed to load employees:", error);
-  }
+  const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);
+  employeeList.value = res.data;
 };
+// const loadEmployee = async () => {
+//   try {
+//     const res = await HttpService.getAxiosClient().get(
+//       `${BASE_PATH}/employees`
+//     );
+//     employeeList.value = res.data;
+//   } catch (error) {
+//     console.error("Failed to load employees:", error);
+//   }
+// };
 
 const handleEditEmployee = async (value: Employee) => {
   idEmployee.value = value.Id;
@@ -105,37 +111,40 @@ const subMit = async () => {
         await loadEmployee();
       }
     } catch (error) {
-      console.log('Failed to update employee', error);
+      console.log("Failed to update employee", error);
     }
   } else {
     try {
-      const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/employees`, {
-        FirstName: firstName.value,
-        LastName: lastName.value,
-        Title: title.value,
-        TitleOfCourtesy: titleOfCourtesy.value,
-        BirthDate: birthDate.value,
-        HireDate: hireDate.value,
-        Address: address.value,
-        City: city.value,
-        Region: region.value,
-        PostalCode: postalCode.value,
-        Country: country.value,
-        HomePhone: homePhone.value,
-        Extension: extension.value,
-        Photo: photo.value,
-        Notes: notes.value,
-        ReportsTo: reportsTo.value,
-        PhotoPath: photoPath.value,
-      });
+      const res = await HttpService.getAxiosClient().post(
+        `${BASE_PATH}/employees`,
+        {
+          FirstName: firstName.value,
+          LastName: lastName.value,
+          Title: title.value,
+          TitleOfCourtesy: titleOfCourtesy.value,
+          BirthDate: birthDate.value,
+          HireDate: hireDate.value,
+          Address: address.value,
+          City: city.value,
+          Region: region.value,
+          PostalCode: postalCode.value,
+          Country: country.value,
+          HomePhone: homePhone.value,
+          Extension: extension.value,
+          Photo: photo.value,
+          Notes: notes.value,
+          ReportsTo: reportsTo.value,
+          PhotoPath: photoPath.value,
+        }
+      );
       if (res.status === 201) {
         await loadEmployee();
-        console.log('Employee added successfully');
+        console.log("Employee added successfully");
       } else {
-        console.log('Failed to add employee');
+        console.log("Failed to add employee");
       }
     } catch (error) {
-      console.log('Failed to add employee', error);
+      console.log("Failed to add employee", error);
     }
   }
   reset();
@@ -164,15 +173,17 @@ const reset = async () => {
 
 const handleDeleteEmployee = async (index: number) => {
   try {
-    const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/employees/${index}`);
+    const res = await HttpService.getAxiosClient().delete(
+      `${BASE_PATH}/employees/${index}`
+    );
     if (res.status === 200) {
       await loadEmployee();
-      console.log('Employee removed successfully');
+      console.log("Employee removed successfully");
     } else {
-      console.log('Failed to remove employee');
+      console.log("Failed to remove employee");
     }
   } catch (error) {
-    console.log('Failed to remove employee', error);
+    console.log("Failed to remove employee", error);
   }
 };
 
@@ -187,11 +198,21 @@ onMounted(async () => {
     <form @submit.prevent="subMit" class="employee-form">
       <div class="form-group">
         <label for="firstName">First Name</label>
-        <input type="text" v-model="firstName" placeholder="Enter First Name" required />
+        <input
+          type="text"
+          v-model="firstName"
+          placeholder="Enter First Name"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="lastName">Last Name</label>
-        <input type="text" v-model="lastName" placeholder="Enter Last Name" required />
+        <input
+          type="text"
+          v-model="lastName"
+          placeholder="Enter Last Name"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="title">Title</label>
@@ -199,7 +220,12 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="titleOfCourtesy">Title Of Courtesy</label>
-        <input type="text" v-model="titleOfCourtesy" placeholder="Enter Courtesy Title" required />
+        <input
+          type="text"
+          v-model="titleOfCourtesy"
+          placeholder="Enter Courtesy Title"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="birthDate">Birth Date</label>
@@ -211,7 +237,12 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="address">Address</label>
-        <input type="text" v-model="address" placeholder="Enter Address" required />
+        <input
+          type="text"
+          v-model="address"
+          placeholder="Enter Address"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="city">City</label>
@@ -219,28 +250,58 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="region">Region</label>
-        <input type="text" v-model="region" placeholder="Enter Region" required />
+        <input
+          type="text"
+          v-model="region"
+          placeholder="Enter Region"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="postalCode">Postal Code</label>
-        <input type="text" v-model="postalCode" placeholder="Enter Postal Code" required />
+        <input
+          type="text"
+          v-model="postalCode"
+          placeholder="Enter Postal Code"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="country">Country</label>
-        <input type="text" v-model="country" placeholder="Enter Country" required />
+        <input
+          type="text"
+          v-model="country"
+          placeholder="Enter Country"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="homePhone">Home Phone</label>
-        <input type="text" v-model="homePhone" placeholder="Enter Home Phone
-        " required />
+        <input
+          type="text"
+          v-model="homePhone"
+          placeholder="Enter Home Phone
+        "
+          required
+        />
       </div>
       <div class="form-group">
         <label for="extension">Extension</label>
-        <input type="text" v-model="extension" placeholder="Enter Extension" required />
+        <input
+          type="text"
+          v-model="extension"
+          placeholder="Enter Extension"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="photo">Photo</label>
-        <input type="text" v-model="photo" placeholder="Enter Photo URL" required />
+        <input
+          type="text"
+          v-model="photo"
+          placeholder="Enter Photo URL"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="notes">Notes</label>
@@ -248,11 +309,21 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="reportsTo">Reports To</label>
-        <input type="number" v-model="reportsTo" placeholder="Enter Reports To ID" required />
+        <input
+          type="number"
+          v-model="reportsTo"
+          placeholder="Enter Reports To ID"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="photoPath">Photo Path</label>
-        <input type="text" v-model="photoPath" placeholder="Enter Photo Path" required />
+        <input
+          type="text"
+          v-model="photoPath"
+          placeholder="Enter Photo Path"
+          required
+        />
       </div>
       <button type="submit" class="btn-add">Add / Update Employee</button>
     </form>
@@ -285,9 +356,20 @@ onMounted(async () => {
             <td>{{ employee.City }}</td>
             <td>{{ employee.Country }}</td>
             <td>
-              <button class="btn-edit" @click="handleEditEmployee(employee)">Edit</button>
-              <button class="btn-delete"
-                @click="() => { if (employee.Id !== undefined) handleDeleteEmployee(employee.Id) }">Delete</button>
+              <button class="btn-edit" @click="handleEditEmployee(employee)">
+                Edit
+              </button>
+              <button
+                class="btn-delete"
+                @click="
+                  () => {
+                    if (employee.Id !== undefined)
+                      handleDeleteEmployee(employee.Id);
+                  }
+                "
+              >
+                Delete
+              </button>
             </td>
           </tr>
         </tbody>
@@ -310,7 +392,7 @@ onMounted(async () => {
 
 h1 {
   text-align: center;
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .employee-form {
@@ -339,7 +421,7 @@ textarea {
 }
 
 .btn-add {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;

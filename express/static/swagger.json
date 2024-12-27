@@ -806,6 +806,7 @@
 						}
 					}
 				},
+				"description": "Get all employees",
 				"security": [
 					{
 						"keycloak": []
@@ -905,6 +906,7 @@
 						}
 					}
 				},
+				"description": "Create a new employee",
 				"security": [
 					{
 						"keycloak": []
@@ -1069,10 +1071,15 @@
 											"type": "object"
 										},
 										{
-											"type": "string",
-											"enum": [
-												"ไม่พบข้อมูล"
-											]
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
 										}
 									]
 								}
@@ -1080,6 +1087,7 @@
 						}
 					}
 				},
+				"description": "Get employee by ID",
 				"security": [
 					{
 						"keycloak": []
@@ -1188,6 +1196,7 @@
 						}
 					}
 				},
+				"description": "Update employee by ID",
 				"security": [
 					{
 						"keycloak": []
@@ -1276,12 +1285,21 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "string"
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
 								}
 							}
 						}
 					}
 				},
+				"description": "Delete employee by ID",
 				"security": [
 					{
 						"keycloak": []
