@@ -8,8 +8,8 @@ interface Category {
   description: string;
 }
 
-const categoryList = ref<Category[]>([]);
 const idCategory = ref<number | undefined>(undefined);
+const categoryList = ref<Category[]>([]);
 const categoryName = ref<string>("");
 const description = ref<string>("");
 
@@ -20,53 +20,61 @@ const loadCategories = async () => {
     const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/categories`);
     categoryList.value = res.data;
   } catch (error) {
-    console.error("Failed to load categories", error);
+    console.error("ไม่สามารถโหลดหมวดหมู่ได้", error);
   }
 };
 
-const handleEditCategory = (category: Category) => {
-  idCategory.value = category.Id;
-  categoryName.value = category.name || "";
-  description.value = category.description || "";
+const handleEditCategory = (value: Category) => {
+  idCategory.value = value.Id;
+  categoryName.value = value.name;
+  description.value = value.description;
 };
 
 const submitCategory = async () => {
-  const payload = {
-    name: categoryName.value,
-    description: description.value,
-  };
-
-  try {
-    if (idCategory.value) {
-      const res = await HttpService.getAxiosClient().patch(
+  if (idCategory.value !== undefined) {
+    try {
+      const response = await HttpService.getAxiosClient().patch(
         `${BASE_PATH}/categories/${idCategory.value}`,
-        payload
+        {
+          name: categoryName.value,
+          description: description.value,
+        }
       );
-      if (res.status === 200) {
-        console.log("Category updated successfully");
+      if (response.status === 200) {
+        await loadCategories();
+        console.log("อัปเดตหมวดหมู่สำเร็จ");
       }
-    } else {
-      const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/categories`, payload);
-      if (res.status === 201) {
-        console.log("Category added successfully");
-      }
+    } catch (error) {
+      console.log("ไม่สามารถอัปเดตหมวดหมู่ได้", error);
     }
-    await loadCategories();
-    resetForm();
-  } catch (error) {
-    console.error("Failed to save category", error);
+  } else {
+    try {
+      const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/categories`, {
+        name: categoryName.value,
+        description: description.value,
+      });
+      if (res.status === 201) {
+        await loadCategories();
+        console.log("เพิ่มหมวดหมู่สำเร็จ");
+      } else {
+        console.log("ไม่สามารถเพิ่มหมวดหมู่ได้");
+      }
+    } catch (error) {
+      console.log("ไม่สามารถเพิ่มหมวดหมู่ได้", error);
+    }
   }
+  resetForm();
 };
 
 const handleDeleteCategory = async (id: number) => {
   try {
     const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/categories/${id}`);
     if (res.status === 200) {
-      console.log("Category deleted successfully");
+      console.log("ลบหมวดหมู่สำเร็จ");
       await loadCategories();
     }
   } catch (error) {
-    console.error("Failed to delete category", error);
+    console.error("ไม่สามารถลบหมวดหมู่ได้", error);
   }
 };
 
@@ -81,30 +89,30 @@ onMounted(loadCategories);
 
 <template>
   <div class="category-page">
-    <h1>Category Management</h1>
+    <h1>จัดการหมวดหมู่</h1>
 
     <form @submit.prevent="submitCategory" class="category-form">
       <div class="form-group">
-        <label for="categoryName">Category Name</label>
-        <input type="text" v-model="categoryName" placeholder="Enter category name" required />
+        <label for="categoryName">ชื่อหมวดหมู่</label>
+        <input type="text" v-model="categoryName" placeholder="กรอกชื่อหมวดหมู่" required />
       </div>
 
       <div class="form-group">
-        <label for="description">Description</label>
-        <textarea v-model="description" placeholder="Enter description"></textarea>
+        <label for="description">คำอธิบาย</label>
+        <textarea v-model="description" placeholder="กรอกคำอธิบาย"></textarea>
       </div>
 
-      <button type="submit" class="btn-submit">{{ idCategory ? 'Update' : 'Add' }} Category</button>
+      <button type="submit" class="btn-submit">{{ idCategory ? 'อัปเดต' : 'เพิ่ม' }} หมวดหมู่</button>
     </form>
 
     <div class="table-container">
       <table>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Category Name</th>
-            <th>Description</th>
-            <th>Actions</th>
+            <th>รหัส</th>
+            <th>ชื่อหมวดหมู่</th>
+            <th>คำอธิบาย</th>
+            <th>การกระทำ</th>
           </tr>
         </thead>
         <tbody>
@@ -113,8 +121,8 @@ onMounted(loadCategories);
             <td>{{ category.name }}</td>
             <td>{{ category.description }}</td>
             <td>
-              <button class="btn-edit" @click="handleEditCategory(category)">Edit</button>
-              <button class="btn-delete" @click="() => handleDeleteCategory(category.Id!)">Delete</button>
+              <button class="btn-edit" @click="handleEditCategory(category)">แก้ไข</button>
+              <button class="btn-delete" @click="() => handleDeleteCategory(category.Id!)">ลบ</button>
             </td>
           </tr>
         </tbody>

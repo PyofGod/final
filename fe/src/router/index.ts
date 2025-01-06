@@ -5,6 +5,8 @@ import product from "@/views/product.vue";
 import categories from "@/views/categories.vue";
 import employee from "@/views/employee.vue";
 import customer from "@/views/customer.vue";
+import order from "@/views/order.vue";
+import supplier from "@/views/supplier.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +40,16 @@ const router = createRouter({
       path: "/customer",
       name: "customer",
       component: customer,
+    },
+    {
+      path: "/order",
+      name: "order",
+      component: order,
+    },
+    {
+      path: "/supplier",
+      name: "supplier",
+      component: supplier,
     }
   ],
 });

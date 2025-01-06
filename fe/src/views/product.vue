@@ -215,12 +215,15 @@ onMounted(async () => {
             <th>การดำเนินการ</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="(product, index) in productList" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ product.ProductName }}</td>
             <td>{{ product.CategoryId }}</td>
-            <td>{{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}</td>
+            <td :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }">
+              {{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}
+            </td>
             <td>{{ product.QuantityPerUnit }}</td>
             <td>{{ product.ReorderLevel }}</td>
             <td>{{ product.SupplierId }}</td>
@@ -236,6 +239,7 @@ onMounted(async () => {
             </td>
           </tr>
         </tbody>
+
       </table>
     </div>
   </div>
