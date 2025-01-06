@@ -8,9 +8,6 @@ datasource db {
 }
 
 model Product {
-  Id              Int     @id @default(autoincrement())
-  ProductName     String
-  CategoryId      String
   Discontinued    Int
   QuantityPerUnit String?
   ReorderLevel    Int
@@ -18,17 +15,20 @@ model Product {
   UnitPrice       String
   UnitsInStock    Int
   UnitsOnOrder    Int
+  ProductName     String
+  CategoryId      String
+  Id              Int     @id @default(autoincrement())
 }
 
 model Fruit {
-  Id    Int    @id @default(autoincrement())
-  name  String
-  color String
+  name  String?
+  color String?
+  Id    Int     @id @default(autoincrement())
 }
 
 model Categories {
-  Id          String  @id @default(uuid())
-  name        String  @unique
+  Id          Int     @id @default(autoincrement())
+  name        String
   description String?
 }
 
@@ -51,4 +51,50 @@ model Employee {
   ReportsTo       Int?
   Title           String?
   TitleOfCourtesy String?
+}
+
+model Customer {
+  Address      String?
+  City         String?
+  CompanyName  String?
+  ContactName  String?
+  ContactTitle String?
+  Country      String?
+  Fax          String?
+  Id           String  @id @default(uuid())
+  Phone        String?
+  PostalCode   String?
+  Region       String?
+}
+
+model Supplier {
+  Address      String?
+  City         String?
+  CompanyName  String?
+  ContactName  String?
+  ContactTitle String?
+  Country      String?
+  Fax          String?
+  HomePage     String?
+  Id           Int     @id @default(autoincrement())
+  Phone        String?
+  PostalCode   String?
+  Region       String?
+}
+
+model Order {
+  CustomerId     String?
+  EmployeeId     Int
+  Freight        String
+  Id             Int     @id @default(autoincrement())
+  OrderDate      String?
+  RequiredDate   String?
+  ShipAddress    String?
+  ShipCity       String?
+  ShipCountry    String?
+  ShipName       String?
+  ShipPostalCode String?
+  ShipRegion     String?
+  ShipVia        Int?
+  ShippedDate    String?
 }

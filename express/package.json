@@ -11,8 +11,8 @@
     "swagger": "tsoa spec",
     "routes": "tsoa spec-and-routes",
     "dev": "nodemon src/app.ts",
-    "build:docker": "npm run build && docker build -t docker.frappet.com/training/training-fruits: -t docker.frappet.com/training/training-fruits:latest .",
-    "push:docker": "npm run build:docker && docker push docker.frappet.com/training/training-fruits: && docker push docker.frappet.com/training/training-fruits:latest",
+    "build:docker": "npm run build && docker build -t docker.frappet.com/training/fluk_BE:0.0.1 -t docker.frappet.com/training/fluk_BE:latest .",
+    "push:docker": "npm run build:docker && docker push docker.frappet.com/training/fluk_BE:0.0.1 && docker push docker.frappet.com/training/fluk_BE:latest",
     "reload:docker": "docker compose pull && docker compose up -d"
   },
   "keywords": [],

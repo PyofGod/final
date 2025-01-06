@@ -42,6 +42,467 @@
 		"contact": {}
 	},
 	"paths": {
+		"/suppliers": {
+			"get": {
+				"operationId": "GetSuppliers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"Region": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"Phone": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "number",
+												"format": "double"
+											},
+											"HomePage": {
+												"type": "string"
+											},
+											"Fax": {
+												"type": "string"
+											},
+											"Country": {
+												"type": "string"
+											},
+											"ContactTitle": {
+												"type": "string"
+											},
+											"ContactName": {
+												"type": "string"
+											},
+											"CompanyName": {
+												"type": "string"
+											},
+											"City": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"Region",
+											"PostalCode",
+											"Phone",
+											"Id",
+											"HomePage",
+											"Fax",
+											"Country",
+											"ContactTitle",
+											"ContactName",
+											"CompanyName",
+											"City",
+											"Address"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all suppliers (Accessible by everyone)",
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateSupplier",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Phone": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										},
+										"HomePage": {
+											"type": "string"
+										},
+										"Fax": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"ContactTitle": {
+											"type": "string"
+										},
+										"ContactName": {
+											"type": "string"
+										},
+										"CompanyName": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"Region",
+										"PostalCode",
+										"Phone",
+										"Id",
+										"HomePage",
+										"Fax",
+										"Country",
+										"ContactTitle",
+										"ContactName",
+										"CompanyName",
+										"City",
+										"Address"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new supplier (Admin only)",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"Phone": {
+										"type": "string"
+									},
+									"HomePage": {
+										"type": "string"
+									},
+									"Fax": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"ContactTitle": {
+										"type": "string"
+									},
+									"ContactName": {
+										"type": "string"
+									},
+									"CompanyName": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/suppliers/{id}": {
+			"get": {
+				"operationId": "GetSupplierById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "number",
+													"format": "double"
+												},
+												"HomePage": {
+													"type": "string"
+												},
+												"Fax": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"ContactTitle": {
+													"type": "string"
+												},
+												"ContactName": {
+													"type": "string"
+												},
+												"CompanyName": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Region",
+												"PostalCode",
+												"Phone",
+												"Id",
+												"HomePage",
+												"Fax",
+												"Country",
+												"ContactTitle",
+												"ContactName",
+												"CompanyName",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Get supplier by ID (Accessible by everyone)",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateSupplier",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Phone": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										},
+										"HomePage": {
+											"type": "string"
+										},
+										"Fax": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"ContactTitle": {
+											"type": "string"
+										},
+										"ContactName": {
+											"type": "string"
+										},
+										"CompanyName": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"Region",
+										"PostalCode",
+										"Phone",
+										"Id",
+										"HomePage",
+										"Fax",
+										"Country",
+										"ContactTitle",
+										"ContactName",
+										"CompanyName",
+										"City",
+										"Address"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update supplier by ID (Admin only)",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"Phone": {
+										"type": "string"
+									},
+									"HomePage": {
+										"type": "string"
+									},
+									"Fax": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"ContactTitle": {
+										"type": "string"
+									},
+									"ContactName": {
+										"type": "string"
+									},
+									"CompanyName": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteSupplier",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete supplier by ID (Admin only)",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/products": {
 			"get": {
 				"operationId": "GetProducts",
@@ -53,6 +514,12 @@
 								"schema": {
 									"items": {
 										"properties": {
+											"CategoryId": {
+												"type": "string"
+											},
+											"ProductName": {
+												"type": "string"
+											},
 											"UnitsOnOrder": {
 												"type": "number",
 												"format": "double"
@@ -79,18 +546,14 @@
 												"type": "number",
 												"format": "double"
 											},
-											"CategoryId": {
-												"type": "string"
-											},
-											"ProductName": {
-												"type": "string"
-											},
 											"Id": {
 												"type": "number",
 												"format": "double"
 											}
 										},
 										"required": [
+											"CategoryId",
+											"ProductName",
 											"UnitsOnOrder",
 											"UnitsInStock",
 											"UnitPrice",
@@ -98,8 +561,6 @@
 											"ReorderLevel",
 											"QuantityPerUnit",
 											"Discontinued",
-											"CategoryId",
-											"ProductName",
 											"Id"
 										],
 										"type": "object"
@@ -122,6 +583,12 @@
 							"application/json": {
 								"schema": {
 									"properties": {
+										"CategoryId": {
+											"type": "string"
+										},
+										"ProductName": {
+											"type": "string"
+										},
 										"UnitsOnOrder": {
 											"type": "number",
 											"format": "double"
@@ -148,18 +615,14 @@
 											"type": "number",
 											"format": "double"
 										},
-										"CategoryId": {
-											"type": "string"
-										},
-										"ProductName": {
-											"type": "string"
-										},
 										"Id": {
 											"type": "number",
 											"format": "double"
 										}
 									},
 									"required": [
+										"CategoryId",
+										"ProductName",
 										"UnitsOnOrder",
 										"UnitsInStock",
 										"UnitPrice",
@@ -167,8 +630,6 @@
 										"ReorderLevel",
 										"QuantityPerUnit",
 										"Discontinued",
-										"CategoryId",
-										"ProductName",
 										"Id"
 									],
 									"type": "object"
@@ -251,6 +712,12 @@
 									"anyOf": [
 										{
 											"properties": {
+												"CategoryId": {
+													"type": "string"
+												},
+												"ProductName": {
+													"type": "string"
+												},
 												"UnitsOnOrder": {
 													"type": "number",
 													"format": "double"
@@ -277,18 +744,14 @@
 													"type": "number",
 													"format": "double"
 												},
-												"CategoryId": {
-													"type": "string"
-												},
-												"ProductName": {
-													"type": "string"
-												},
 												"Id": {
 													"type": "number",
 													"format": "double"
 												}
 											},
 											"required": [
+												"CategoryId",
+												"ProductName",
 												"UnitsOnOrder",
 												"UnitsInStock",
 												"UnitPrice",
@@ -296,8 +759,6 @@
 												"ReorderLevel",
 												"QuantityPerUnit",
 												"Discontinued",
-												"CategoryId",
-												"ProductName",
 												"Id"
 											],
 											"type": "object"
@@ -335,6 +796,12 @@
 							"application/json": {
 								"schema": {
 									"properties": {
+										"CategoryId": {
+											"type": "string"
+										},
+										"ProductName": {
+											"type": "string"
+										},
 										"UnitsOnOrder": {
 											"type": "number",
 											"format": "double"
@@ -361,18 +828,14 @@
 											"type": "number",
 											"format": "double"
 										},
-										"CategoryId": {
-											"type": "string"
-										},
-										"ProductName": {
-											"type": "string"
-										},
 										"Id": {
 											"type": "number",
 											"format": "double"
 										}
 									},
 									"required": [
+										"CategoryId",
+										"ProductName",
 										"UnitsOnOrder",
 										"UnitsInStock",
 										"UnitPrice",
@@ -380,8 +843,6 @@
 										"ReorderLevel",
 										"QuantityPerUnit",
 										"Discontinued",
-										"CategoryId",
-										"ProductName",
 										"Id"
 									],
 									"type": "object"
@@ -469,6 +930,515 @@
 						"keycloak": []
 					}
 				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/orders": {
+			"get": {
+				"operationId": "GetOrders",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"ShippedDate": {
+												"type": "string"
+											},
+											"ShipVia": {
+												"type": "number",
+												"format": "double"
+											},
+											"ShipRegion": {
+												"type": "string"
+											},
+											"ShipPostalCode": {
+												"type": "string"
+											},
+											"ShipName": {
+												"type": "string"
+											},
+											"ShipCountry": {
+												"type": "string"
+											},
+											"ShipCity": {
+												"type": "string"
+											},
+											"ShipAddress": {
+												"type": "string"
+											},
+											"RequiredDate": {
+												"type": "string"
+											},
+											"OrderDate": {
+												"type": "string"
+											},
+											"Freight": {
+												"type": "string"
+											},
+											"EmployeeId": {
+												"type": "number",
+												"format": "double"
+											},
+											"CustomerId": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "number",
+												"format": "double"
+											}
+										},
+										"required": [
+											"ShippedDate",
+											"ShipVia",
+											"ShipRegion",
+											"ShipPostalCode",
+											"ShipName",
+											"ShipCountry",
+											"ShipCity",
+											"ShipAddress",
+											"RequiredDate",
+											"OrderDate",
+											"Freight",
+											"EmployeeId",
+											"CustomerId",
+											"Id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all orders (Accessible by everyone)",
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateOrder",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"ShippedDate": {
+											"type": "string"
+										},
+										"ShipVia": {
+											"type": "number",
+											"format": "double"
+										},
+										"ShipRegion": {
+											"type": "string"
+										},
+										"ShipPostalCode": {
+											"type": "string"
+										},
+										"ShipName": {
+											"type": "string"
+										},
+										"ShipCountry": {
+											"type": "string"
+										},
+										"ShipCity": {
+											"type": "string"
+										},
+										"ShipAddress": {
+											"type": "string"
+										},
+										"RequiredDate": {
+											"type": "string"
+										},
+										"OrderDate": {
+											"type": "string"
+										},
+										"Freight": {
+											"type": "string"
+										},
+										"EmployeeId": {
+											"type": "number",
+											"format": "double"
+										},
+										"CustomerId": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"ShippedDate",
+										"ShipVia",
+										"ShipRegion",
+										"ShipPostalCode",
+										"ShipName",
+										"ShipCountry",
+										"ShipCity",
+										"ShipAddress",
+										"RequiredDate",
+										"OrderDate",
+										"Freight",
+										"EmployeeId",
+										"CustomerId",
+										"Id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new order (Accessible by everyone)",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"ShippedDate": {
+										"type": "string"
+									},
+									"ShipVia": {
+										"type": "number",
+										"format": "double"
+									},
+									"ShipRegion": {
+										"type": "string"
+									},
+									"ShipPostalCode": {
+										"type": "string"
+									},
+									"ShipName": {
+										"type": "string"
+									},
+									"ShipCountry": {
+										"type": "string"
+									},
+									"ShipCity": {
+										"type": "string"
+									},
+									"ShipAddress": {
+										"type": "string"
+									},
+									"RequiredDate": {
+										"type": "string"
+									},
+									"OrderDate": {
+										"type": "string"
+									},
+									"Freight": {
+										"type": "string"
+									},
+									"EmployeeId": {
+										"type": "number",
+										"format": "double"
+									},
+									"CustomerId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"Freight",
+									"EmployeeId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/orders/{id}": {
+			"get": {
+				"operationId": "GetOrderById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"ShippedDate": {
+													"type": "string"
+												},
+												"ShipVia": {
+													"type": "number",
+													"format": "double"
+												},
+												"ShipRegion": {
+													"type": "string"
+												},
+												"ShipPostalCode": {
+													"type": "string"
+												},
+												"ShipName": {
+													"type": "string"
+												},
+												"ShipCountry": {
+													"type": "string"
+												},
+												"ShipCity": {
+													"type": "string"
+												},
+												"ShipAddress": {
+													"type": "string"
+												},
+												"RequiredDate": {
+													"type": "string"
+												},
+												"OrderDate": {
+													"type": "string"
+												},
+												"Freight": {
+													"type": "string"
+												},
+												"EmployeeId": {
+													"type": "number",
+													"format": "double"
+												},
+												"CustomerId": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"ShippedDate",
+												"ShipVia",
+												"ShipRegion",
+												"ShipPostalCode",
+												"ShipName",
+												"ShipCountry",
+												"ShipCity",
+												"ShipAddress",
+												"RequiredDate",
+												"OrderDate",
+												"Freight",
+												"EmployeeId",
+												"CustomerId",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Get order by ID (Accessible by everyone)",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateOrder",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"ShippedDate": {
+											"type": "string"
+										},
+										"ShipVia": {
+											"type": "number",
+											"format": "double"
+										},
+										"ShipRegion": {
+											"type": "string"
+										},
+										"ShipPostalCode": {
+											"type": "string"
+										},
+										"ShipName": {
+											"type": "string"
+										},
+										"ShipCountry": {
+											"type": "string"
+										},
+										"ShipCity": {
+											"type": "string"
+										},
+										"ShipAddress": {
+											"type": "string"
+										},
+										"RequiredDate": {
+											"type": "string"
+										},
+										"OrderDate": {
+											"type": "string"
+										},
+										"Freight": {
+											"type": "string"
+										},
+										"EmployeeId": {
+											"type": "number",
+											"format": "double"
+										},
+										"CustomerId": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"ShippedDate",
+										"ShipVia",
+										"ShipRegion",
+										"ShipPostalCode",
+										"ShipName",
+										"ShipCountry",
+										"ShipCity",
+										"ShipAddress",
+										"RequiredDate",
+										"OrderDate",
+										"Freight",
+										"EmployeeId",
+										"CustomerId",
+										"Id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update order by ID (Accessible by everyone)",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"ShippedDate": {
+										"type": "string"
+									},
+									"ShipVia": {
+										"type": "number",
+										"format": "double"
+									},
+									"ShipRegion": {
+										"type": "string"
+									},
+									"ShipPostalCode": {
+										"type": "string"
+									},
+									"ShipName": {
+										"type": "string"
+									},
+									"ShipCountry": {
+										"type": "string"
+									},
+									"ShipCity": {
+										"type": "string"
+									},
+									"ShipAddress": {
+										"type": "string"
+									},
+									"RequiredDate": {
+										"type": "string"
+									},
+									"OrderDate": {
+										"type": "string"
+									},
+									"Freight": {
+										"type": "string"
+									},
+									"EmployeeId": {
+										"type": "number",
+										"format": "double"
+									},
+									"CustomerId": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteOrder",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete order by ID (Accessible by everyone)",
+				"security": [],
 				"parameters": [
 					{
 						"in": "path",
@@ -731,12 +1701,6 @@
 												"type": "number",
 												"format": "double"
 											},
-											"Region": {
-												"type": "string"
-											},
-											"PostalCode": {
-												"type": "string"
-											},
 											"PhotoPath": {
 												"type": "string"
 											},
@@ -761,29 +1725,33 @@
 											"Extension": {
 												"type": "string"
 											},
+											"BirthDate": {
+												"type": "string"
+											},
+											"Region": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "number",
+												"format": "double"
+											},
 											"Country": {
 												"type": "string"
 											},
 											"City": {
 												"type": "string"
 											},
-											"BirthDate": {
-												"type": "string"
-											},
 											"Address": {
 												"type": "string"
-											},
-											"Id": {
-												"type": "number",
-												"format": "double"
 											}
 										},
 										"required": [
 											"TitleOfCourtesy",
 											"Title",
 											"ReportsTo",
-											"Region",
-											"PostalCode",
 											"PhotoPath",
 											"Photo",
 											"Notes",
@@ -792,11 +1760,13 @@
 											"HireDate",
 											"FirstName",
 											"Extension",
+											"BirthDate",
+											"Region",
+											"PostalCode",
+											"Id",
 											"Country",
 											"City",
-											"BirthDate",
-											"Address",
-											"Id"
+											"Address"
 										],
 										"type": "object"
 									},
@@ -833,12 +1803,6 @@
 											"type": "number",
 											"format": "double"
 										},
-										"Region": {
-											"type": "string"
-										},
-										"PostalCode": {
-											"type": "string"
-										},
 										"PhotoPath": {
 											"type": "string"
 										},
@@ -863,29 +1827,33 @@
 										"Extension": {
 											"type": "string"
 										},
+										"BirthDate": {
+											"type": "string"
+										},
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										},
 										"Country": {
 											"type": "string"
 										},
 										"City": {
 											"type": "string"
 										},
-										"BirthDate": {
-											"type": "string"
-										},
 										"Address": {
 											"type": "string"
-										},
-										"Id": {
-											"type": "number",
-											"format": "double"
 										}
 									},
 									"required": [
 										"TitleOfCourtesy",
 										"Title",
 										"ReportsTo",
-										"Region",
-										"PostalCode",
 										"PhotoPath",
 										"Photo",
 										"Notes",
@@ -894,11 +1862,13 @@
 										"HireDate",
 										"FirstName",
 										"Extension",
+										"BirthDate",
+										"Region",
+										"PostalCode",
+										"Id",
 										"Country",
 										"City",
-										"BirthDate",
-										"Address",
-										"Id"
+										"Address"
 									],
 									"type": "object"
 								}
@@ -1001,12 +1971,6 @@
 													"type": "number",
 													"format": "double"
 												},
-												"Region": {
-													"type": "string"
-												},
-												"PostalCode": {
-													"type": "string"
-												},
 												"PhotoPath": {
 													"type": "string"
 												},
@@ -1031,29 +1995,33 @@
 												"Extension": {
 													"type": "string"
 												},
+												"BirthDate": {
+													"type": "string"
+												},
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "number",
+													"format": "double"
+												},
 												"Country": {
 													"type": "string"
 												},
 												"City": {
 													"type": "string"
 												},
-												"BirthDate": {
-													"type": "string"
-												},
 												"Address": {
 													"type": "string"
-												},
-												"Id": {
-													"type": "number",
-													"format": "double"
 												}
 											},
 											"required": [
 												"TitleOfCourtesy",
 												"Title",
 												"ReportsTo",
-												"Region",
-												"PostalCode",
 												"PhotoPath",
 												"Photo",
 												"Notes",
@@ -1062,11 +2030,13 @@
 												"HireDate",
 												"FirstName",
 												"Extension",
+												"BirthDate",
+												"Region",
+												"PostalCode",
+												"Id",
 												"Country",
 												"City",
-												"BirthDate",
-												"Address",
-												"Id"
+												"Address"
 											],
 											"type": "object"
 										},
@@ -1123,12 +2093,6 @@
 											"type": "number",
 											"format": "double"
 										},
-										"Region": {
-											"type": "string"
-										},
-										"PostalCode": {
-											"type": "string"
-										},
 										"PhotoPath": {
 											"type": "string"
 										},
@@ -1153,29 +2117,33 @@
 										"Extension": {
 											"type": "string"
 										},
+										"BirthDate": {
+											"type": "string"
+										},
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
+										},
 										"Country": {
 											"type": "string"
 										},
 										"City": {
 											"type": "string"
 										},
-										"BirthDate": {
-											"type": "string"
-										},
 										"Address": {
 											"type": "string"
-										},
-										"Id": {
-											"type": "number",
-											"format": "double"
 										}
 									},
 									"required": [
 										"TitleOfCourtesy",
 										"Title",
 										"ReportsTo",
-										"Region",
-										"PostalCode",
 										"PhotoPath",
 										"Photo",
 										"Notes",
@@ -1184,11 +2152,13 @@
 										"HireDate",
 										"FirstName",
 										"Extension",
+										"BirthDate",
+										"Region",
+										"PostalCode",
+										"Id",
 										"Country",
 										"City",
-										"BirthDate",
-										"Address",
-										"Id"
+										"Address"
 									],
 									"type": "object"
 								}
@@ -1317,6 +2287,449 @@
 				]
 			}
 		},
+		"/customers": {
+			"get": {
+				"operationId": "GetCustomers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"Region": {
+												"type": "string"
+											},
+											"PostalCode": {
+												"type": "string"
+											},
+											"Phone": {
+												"type": "string"
+											},
+											"Id": {
+												"type": "string"
+											},
+											"Fax": {
+												"type": "string"
+											},
+											"Country": {
+												"type": "string"
+											},
+											"ContactTitle": {
+												"type": "string"
+											},
+											"ContactName": {
+												"type": "string"
+											},
+											"CompanyName": {
+												"type": "string"
+											},
+											"City": {
+												"type": "string"
+											},
+											"Address": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"Region",
+											"PostalCode",
+											"Phone",
+											"Id",
+											"Fax",
+											"Country",
+											"ContactTitle",
+											"ContactName",
+											"CompanyName",
+											"City",
+											"Address"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all customers",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateCustomer",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Phone": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "string"
+										},
+										"Fax": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"ContactTitle": {
+											"type": "string"
+										},
+										"ContactName": {
+											"type": "string"
+										},
+										"CompanyName": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"Region",
+										"PostalCode",
+										"Phone",
+										"Id",
+										"Fax",
+										"Country",
+										"ContactTitle",
+										"ContactName",
+										"CompanyName",
+										"City",
+										"Address"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new customer",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"Phone": {
+										"type": "string"
+									},
+									"Fax": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"ContactTitle": {
+										"type": "string"
+									},
+									"ContactName": {
+										"type": "string"
+									},
+									"CompanyName": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/customers/{id}": {
+			"get": {
+				"operationId": "GetCustomerById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"Region": {
+													"type": "string"
+												},
+												"PostalCode": {
+													"type": "string"
+												},
+												"Phone": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "string"
+												},
+												"Fax": {
+													"type": "string"
+												},
+												"Country": {
+													"type": "string"
+												},
+												"ContactTitle": {
+													"type": "string"
+												},
+												"ContactName": {
+													"type": "string"
+												},
+												"CompanyName": {
+													"type": "string"
+												},
+												"City": {
+													"type": "string"
+												},
+												"Address": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"Region",
+												"PostalCode",
+												"Phone",
+												"Id",
+												"Fax",
+												"Country",
+												"ContactTitle",
+												"ContactName",
+												"CompanyName",
+												"City",
+												"Address"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Get customer by ID",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateCustomer",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Region": {
+											"type": "string"
+										},
+										"PostalCode": {
+											"type": "string"
+										},
+										"Phone": {
+											"type": "string"
+										},
+										"Id": {
+											"type": "string"
+										},
+										"Fax": {
+											"type": "string"
+										},
+										"Country": {
+											"type": "string"
+										},
+										"ContactTitle": {
+											"type": "string"
+										},
+										"ContactName": {
+											"type": "string"
+										},
+										"CompanyName": {
+											"type": "string"
+										},
+										"City": {
+											"type": "string"
+										},
+										"Address": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"Region",
+										"PostalCode",
+										"Phone",
+										"Id",
+										"Fax",
+										"Country",
+										"ContactTitle",
+										"ContactName",
+										"CompanyName",
+										"City",
+										"Address"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update customer by ID",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"Region": {
+										"type": "string"
+									},
+									"PostalCode": {
+										"type": "string"
+									},
+									"Phone": {
+										"type": "string"
+									},
+									"Fax": {
+										"type": "string"
+									},
+									"Country": {
+										"type": "string"
+									},
+									"ContactTitle": {
+										"type": "string"
+									},
+									"ContactName": {
+										"type": "string"
+									},
+									"CompanyName": {
+										"type": "string"
+									},
+									"City": {
+										"type": "string"
+									},
+									"Address": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteCustomer",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete customer by ID",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/categories": {
 			"get": {
 				"operationId": "GetCategories",
@@ -1335,7 +2748,8 @@
 												"type": "string"
 											},
 											"Id": {
-												"type": "string"
+												"type": "number",
+												"format": "double"
 											}
 										},
 										"required": [
@@ -1351,7 +2765,12 @@
 						}
 					}
 				},
-				"security": [],
+				"description": "Get all categories (Accessible by user and admin)",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": []
 			},
 			"post": {
@@ -1363,21 +2782,21 @@
 							"application/json": {
 								"schema": {
 									"properties": {
-										"id": {
-											"type": "number",
-											"format": "double"
-										},
 										"description": {
 											"type": "string"
 										},
 										"name": {
 											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
 										}
 									},
 									"required": [
-										"id",
 										"description",
-										"name"
+										"name",
+										"Id"
 									],
 									"type": "object"
 								}
@@ -1385,7 +2804,7 @@
 						}
 					}
 				},
-				"description": "Create a category",
+				"description": "Create a new category (Accessible by user and admin)",
 				"security": [
 					{
 						"keycloak": []
@@ -1406,7 +2825,6 @@
 									}
 								},
 								"required": [
-									"description",
 									"name"
 								],
 								"type": "object"
@@ -1425,15 +2843,50 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {},
-									"type": "array"
+									"anyOf": [
+										{
+											"properties": {
+												"description": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"Id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"description",
+												"name",
+												"Id"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
 					}
 				},
-				"description": "Get category by ID",
-				"security": [],
+				"description": "Get category by ID (Accessible by user and admin)",
+				"security": [
+					{
+						"keycloak": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1454,20 +2907,21 @@
 							"application/json": {
 								"schema": {
 									"properties": {
-										"id": {
-											"type": "string"
-										},
 										"description": {
 											"type": "string"
 										},
 										"name": {
 											"type": "string"
+										},
+										"Id": {
+											"type": "number",
+											"format": "double"
 										}
 									},
 									"required": [
-										"id",
 										"description",
-										"name"
+										"name",
+										"Id"
 									],
 									"type": "object"
 								}
@@ -1475,7 +2929,7 @@
 						}
 					}
 				},
-				"description": "Update a category",
+				"description": "Update category by ID (Accessible by user and admin)",
 				"security": [
 					{
 						"keycloak": []
@@ -1504,10 +2958,6 @@
 										"type": "string"
 									}
 								},
-								"required": [
-									"description",
-									"name"
-								],
 								"type": "object"
 							}
 						}
@@ -1536,7 +2986,7 @@
 						}
 					}
 				},
-				"description": "Delete a category",
+				"description": "Delete category by ID (Accessible by user and admin)",
 				"security": [
 					{
 						"keycloak": []

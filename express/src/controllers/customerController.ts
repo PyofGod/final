@@ -17,111 +17,124 @@ import Express from "express";
 import HttpError from "../interfaces/http-error";
 import HttpStatus from "../interfaces/http-status";
 
-@Route("categories")
-export class CategoriesController extends Controller {
+@Route("customers")
+export class CustomerController extends Controller {
   /**
-   * Get all categories (Accessible by user and admin)
+   * Get all customers
    */
   @Get()
   @Security("keycloak")
-  public async getCategories(
+  public async getCustomers(
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    if (!req.user.role.includes("user") && !req.user.role.includes("admin")) {
+    if (!req.user.role.includes("admin")) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    return prisma.categories.findMany();
+    return prisma.customer.findMany();
   }
 
   /**
-   * Get category by ID (Accessible by user and admin)
+   * Get customer by ID
    * @param id
    */
   @Get("{id}")
   @Security("keycloak")
-  public async getCategoryById(
+  public async getCustomerById(
     @Path() id: string,
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    if (!req.user.role.includes("user") && !req.user.role.includes("admin")) {
+    if (!req.user.role.includes("admin")) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const idNumber = parseInt(id, 10);
-    const category = await prisma.categories.findFirst({
-      where: { Id: idNumber },
+    const customer = await prisma.customer.findFirst({
+      where: { Id: id },
     });
-    return category || { message: "Category not found" };
+    return customer || { message: "Customer not found" };
   }
 
   /**
-   * Create a new category (Accessible by user and admin)
+   * Create a new customer
    */
   @Post()
   @Security("keycloak")
   @SuccessResponse("201", "Created")
-  public async createCategory(
+  public async createCustomer(
     @Request() req: Express.Request & { user: { role: string[] } },
     @Body()
     requestBody: {
-      name: string;
-      description?: string;
+      Address?: string;
+      City?: string;
+      CompanyName?: string;
+      ContactName?: string;
+      ContactTitle?: string;
+      Country?: string;
+      Fax?: string;
+      Phone?: string;
+      PostalCode?: string;
+      Region?: string;
     }
   ) {
-    if (!req.user.role.includes("user") && !req.user.role.includes("admin")) {
+    if (!req.user.role.includes("admin")) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    return prisma.categories.create({
+    return prisma.customer.create({
       data: requestBody,
     });
   }
 
   /**
-   * Update category by ID (Accessible by user and admin)
+   * Update customer by ID
    * @param id
    */
   @Patch("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Updated")
-  public async updateCategory(
+  public async updateCustomer(
     @Request() req: Express.Request & { user: { role: string[] } },
     @Path() id: string,
     @Body()
     requestBody: {
-      name?: string;
-      description?: string;
+      Address?: string;
+      City?: string;
+      CompanyName?: string;
+      ContactName?: string;
+      ContactTitle?: string;
+      Country?: string;
+      Fax?: string;
+      Phone?: string;
+      PostalCode?: string;
+      Region?: string;
     }
   ) {
-    if (!req.user.role.includes("user") && !req.user.role.includes("admin")) {
+    if (!req.user.role.includes("admin")) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const idNumber = parseInt(id, 10);
-    return prisma.categories.update({
-      where: { Id: idNumber },
+    return prisma.customer.update({
+      where: { Id: id },
       data: requestBody,
     });
   }
 
   /**
-   * Delete category by ID (Accessible by user and admin)
+   * Delete customer by ID
    * @param id
    */
   @Delete("{id}")
   @Security("keycloak")
   @SuccessResponse("200", "Deleted")
-  public async deleteCategory(
+  public async deleteCustomer(
     @Path() id: string,
     @Request() req: Express.Request & { user: { role: string[] } }
   ) {
-    if (!req.user.role.includes("user") && !req.user.role.includes("admin")) {
+    if (!req.user.role.includes("admin")) {
       throw new HttpError(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    const idNumber = parseInt(id, 10);
-    await prisma.categories.delete({ where: { Id: idNumber } });
-    return { message: "Category deleted successfully" };
+    await prisma.customer.delete({ where: { Id: id } });
+    return { message: "Customer deleted successfully" };
   }
 }
