@@ -515,7 +515,8 @@
 									"items": {
 										"properties": {
 											"CategoryId": {
-												"type": "string"
+												"type": "number",
+												"format": "double"
 											},
 											"ProductName": {
 												"type": "string"
@@ -584,7 +585,8 @@
 								"schema": {
 									"properties": {
 										"CategoryId": {
-											"type": "string"
+											"type": "number",
+											"format": "double"
 										},
 										"ProductName": {
 											"type": "string"
@@ -677,7 +679,8 @@
 										"format": "double"
 									},
 									"CategoryId": {
-										"type": "string"
+										"type": "number",
+										"format": "double"
 									},
 									"ProductName": {
 										"type": "string"
@@ -713,7 +716,8 @@
 										{
 											"properties": {
 												"CategoryId": {
-													"type": "string"
+													"type": "number",
+													"format": "double"
 												},
 												"ProductName": {
 													"type": "string"
@@ -797,7 +801,8 @@
 								"schema": {
 									"properties": {
 										"CategoryId": {
-											"type": "string"
+											"type": "number",
+											"format": "double"
 										},
 										"ProductName": {
 											"type": "string"
@@ -899,7 +904,8 @@
 										"format": "double"
 									},
 									"CategoryId": {
-										"type": "string"
+										"type": "number",
+										"format": "double"
 									},
 									"ProductName": {
 										"type": "string"

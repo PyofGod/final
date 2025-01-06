@@ -56,7 +56,7 @@ export class ProductController extends Controller {
     @Body()
     requestBody: {
       ProductName: string;
-      CategoryId: string;
+      CategoryId: number;
       Discontinued: number;
       QuantityPerUnit?: string;
       ReorderLevel: number;
@@ -96,7 +96,7 @@ export class ProductController extends Controller {
     @Body()
     requestBody: {
       ProductName?: string;
-      CategoryId?: string;
+      CategoryId?: number;
       Discontinued?: number;
       QuantityPerUnit?: string;
       ReorderLevel?: number;

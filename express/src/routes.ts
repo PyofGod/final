@@ -270,7 +270,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsProductController_createProduct: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
-                requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"UnitsOnOrder":{"dataType":"double","required":true},"UnitsInStock":{"dataType":"double","required":true},"UnitPrice":{"dataType":"string","required":true},"SupplierId":{"dataType":"double","required":true},"ReorderLevel":{"dataType":"double","required":true},"QuantityPerUnit":{"dataType":"string"},"Discontinued":{"dataType":"double","required":true},"CategoryId":{"dataType":"string","required":true},"ProductName":{"dataType":"string","required":true}}},
+                requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"UnitsOnOrder":{"dataType":"double","required":true},"UnitsInStock":{"dataType":"double","required":true},"UnitPrice":{"dataType":"string","required":true},"SupplierId":{"dataType":"double","required":true},"ReorderLevel":{"dataType":"double","required":true},"QuantityPerUnit":{"dataType":"string"},"Discontinued":{"dataType":"double","required":true},"CategoryId":{"dataType":"double","required":true},"ProductName":{"dataType":"string","required":true}}},
         };
         app.post('/products',
             authenticateMiddleware([{"keycloak":[]}]),
@@ -303,7 +303,7 @@ export function RegisterRoutes(app: Router) {
         const argsProductController_updateProduct: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
-                requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"UnitsOnOrder":{"dataType":"double"},"UnitsInStock":{"dataType":"double"},"UnitPrice":{"dataType":"string"},"SupplierId":{"dataType":"double"},"ReorderLevel":{"dataType":"double"},"QuantityPerUnit":{"dataType":"string"},"Discontinued":{"dataType":"double"},"CategoryId":{"dataType":"string"},"ProductName":{"dataType":"string"}}},
+                requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"UnitsOnOrder":{"dataType":"double"},"UnitsInStock":{"dataType":"double"},"UnitPrice":{"dataType":"string"},"SupplierId":{"dataType":"double"},"ReorderLevel":{"dataType":"double"},"QuantityPerUnit":{"dataType":"string"},"Discontinued":{"dataType":"double"},"CategoryId":{"dataType":"double"},"ProductName":{"dataType":"string"}}},
         };
         app.patch('/products/:id',
             authenticateMiddleware([{"keycloak":[]}]),

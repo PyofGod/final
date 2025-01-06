@@ -16,7 +16,7 @@ model Product {
   UnitsInStock    Int
   UnitsOnOrder    Int
   ProductName     String
-  CategoryId      String
+  CategoryId      Int
   Id              Int     @id @default(autoincrement())
 }
 
