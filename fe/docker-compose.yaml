@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  fe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" # Map port 8080 ของเครื่องโฮสต์ไปยัง port 80 ของ container
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro # Mount ไฟล์ build ของโปรเจกต์ไปยัง nginx
+    environment:
+      - NODE_ENV=production
+    container_name: fe_container

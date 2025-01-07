@@ -1,5 +1,7 @@
 @host = https://identity.frappet.synology.me
-@token = MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzdaY6hyfBtsJWx8EYiXnharkR+rZFYU3/URAqOoHSmuv+87/05FZkZ/bqs1k9aonnzD+jrXsEVOckXzI2avqwhJbsgvIR9BCz07wGJymQxmFZUDxyv1Txkm/HB/5EkxXMENkHrbXP4q5Fe70yE/SUvSyzwOHptwk9jv3JWHrQI3DUFCJYcxcBfNsoUuofaiXp7BB8ZKS9QU+YZem9EgEQGXvrkCnqRSblpEG+7bKoLjcNyGoAxFBAjfBi+5qIPTHAaHfc2N08VIXJGOok+lzZl8kD4sMcNA21sHwExOcnUKXTufmJpLNdFs25tr2+K9S/9pdlXI7PS9+oxSDXSM6qwIDAQAB
+@token = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ3V0V6aG94dGFBTTV6b3JpWFVYdF9fbUExcTdkX0o3cDZXYUh0ZGk2bUR3In0.eyJleHAiOjE3MzYyMjc5MTMsImlhdCI6MTczNjIyMDcxMywianRpIjoiOGE5Mzg1YzYtZjIyMy00NzE2LWI4MTgtMGM5ODFkMTQ2Yjc2IiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5mcmFwcGV0LnN5bm9sb2d5Lm1lL3JlYWxtcy9tYXN0ZXIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbi1jbGkiLCJzaWQiOiI2OTQ0YzM2OS0wMmVkLTQ5ZjAtODg0Zi0wMTE1MjgzYjRmZTYiLCJzY29wZSI6InByb2ZpbGUgZW1haWwifQ.hwdaftRXMoQ4ObbWyDVPAOLXMeRKS96ePmjEvmcrLcHNzBJMwIC7NGAzLbtV3nw-I0uBM3V9EhDk6uIRKB7caqaYoto1tFoxaem8uvq-Tw8WHlfoP53RAlv19Rtjh-dSbih7WXowlnuWfXfqo04kKTzLewFqAZSeyf-C0pVBlouURbjfFWB5_94ulSXG9kINlpsu33-973YLHNslJF5DVAytu5bjEkBKd7D95eVCXtuLyRGnymv3YvYUzJxQCmsYvlelq5krYWgLXmfD40gvrw3D0qRvjpiNMkjGEey718UjxJEpt41XZiGbX0gaUSGCOxCV9PKzTMKcM0baRvc1sg
+
+
 
 
 ## public key of realm
@@ -13,6 +15,9 @@ client_id=express-client
 &password=123
 &grant_type=password
 
+###
+GET {{host}}/admin/realms/fluk-tiw/users
+Authorization: Bearer {{token}}
 
 ########## Admin API https://www.keycloak.org/docs-api/latest/rest-api/index.html
 ## Login by admin of master realms
@@ -25,7 +30,7 @@ client_id=admin-cli
 &grant_type=password
 
 ### Login by secret of sso realms (server to server)
-POST {{host}}/realms/Chayutphong/protocol/openid-connect/token
+POST {{host}}/realms/fluk-tiw/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
 client_id=b2b-client
@@ -37,11 +42,11 @@ GET {{host}}/admin/realms
 Authorization: Bearer {{token}}
 
 ### Get Realms config
-GET {{host}}/admin/realms/Chayutphong
+GET {{host}}/admin/realms/fluk-tiw
 Authorization: Bearer {{token}}
 
 ### Get users in realms
-GET {{host}}/admin/realms/Chayutphong/users
+GET https://identity.frappet.synology.me/admin/realms/fluk-tiw/users
 Authorization: Bearer {{token}}
 
 ### Create user in realms
