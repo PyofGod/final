@@ -214,7 +214,8 @@ const handleDeleteCustomer = async (index: string) => {
                 <button class="btn-edit" @click="handleEditCustomer(customer)">
                   แก้ไข
                 </button>
-                <button class="btn-delete" @click="() => handleDeleteCustomer(customer.Id)">
+                <button class="btn-delete"
+                  @click="() => { if (customer.Id !== undefined) handleDeleteCustomer(customer.Id) }">
                   ลบ
                 </button>
               </div>
