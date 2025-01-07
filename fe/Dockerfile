@@ -1,18 +1,23 @@
-# Base image with Node.js
-FROM node:18
+# ใช้ Node.js image ที่มีการติดตั้งอยู่แล้ว
+FROM node:16
 
-# Set working directory
+# ตั้งค่าพื้นที่ทำงานภายใน container
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# คัดลอกไฟล์ package.json และ package-lock.json เข้ามาใน container
 COPY package*.json ./
+
+# ติดตั้ง dependencies
 RUN npm install
 
-# Copy project files into the container
+# คัดลอกโค้ดทั้งหมดเข้าไปใน container
 COPY . .
 
-# Expose the development server's port
+# สร้างโปรเจกต์ Vue.js
+RUN npm run build
+
+# เปิด port ที่จะให้บริการ (สามารถเปลี่ยนเป็น port ที่คุณต้องการ)
 EXPOSE 8080
 
-# Default command to run the development server
-CMD ["npm", "run", "dev"]
+# รัน server สำหรับโปรเจกต์ Vue.js ที่ถูก build แล้ว
+CMD ["npm", "run", "serve", "--", "--host", "0.0.0.0"]

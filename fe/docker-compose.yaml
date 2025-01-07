@@ -2,15 +2,22 @@ version: "3.8"
 services:
   fe:
     build:
-      context: .
+      context: . # ใช้ Dockerfile ในโฟลเดอร์ปัจจุบัน
       dockerfile: Dockerfile
     ports:
       - "8080:8080" # Map port 8080 ของโฮสต์ไปยัง container
     volumes:
       - .:/app # Mount โฟลเดอร์โปรเจกต์เข้าไปใน container
-      - /app/node_modules # ไม่ mount node_modules เพื่อป้องกันปัญหา dependency
-    stdin_open: true
-    tty: true
+      - /app/node_modules # ไม่ mount node_modules เพื่อป้องกันปัญหาด้าน dependency
+    stdin_open: true # เปิด stdin เพื่อให้สามารถ interact กับ container ได้
+    tty: true # เปิด terminal แบบ interactive
     environment:
-      - NODE_ENV=development
-    container_name: fe_dev
+      - NODE_ENV=development # กำหนด environment เป็น development
+    container_name: fe_dev # ชื่อ container
+    command: npm run serve # คำสั่งที่ใช้รัน Vue.js ใน development mode
+    networks:
+      - vue-network # ตั้งค่าเครือข่าย (ถ้าต้องการเชื่อมต่อกับบริการอื่นๆ)
+
+networks:
+  vue-network:
+    driver: bridge # ใช้ bridge network สำหรับ container
