@@ -1,13 +1,18 @@
-# Step 1: Build the application
-FROM node:18 as build-stage
+# Base image with Node.js
+FROM node:18
+
+# Set working directory
 WORKDIR /app
+
+# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
-COPY . .
-RUN npm run build
 
-# Step 2: Serve with Nginx
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Copy project files into the container
+COPY . .
+
+# Expose the development server's port
+EXPOSE 8080
+
+# Default command to run the development server
+CMD ["npm", "run", "dev"]

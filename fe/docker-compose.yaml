@@ -5,9 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:80" # Map port 8080 ของเครื่องโฮสต์ไปยัง port 80 ของ container
+      - "8080:8080" # Map port 8080 ของโฮสต์ไปยัง container
     volumes:
-      - ./dist:/usr/share/nginx/html:ro # Mount ไฟล์ build ของโปรเจกต์ไปยัง nginx
+      - .:/app # Mount โฟลเดอร์โปรเจกต์เข้าไปใน container
+      - /app/node_modules # ไม่ mount node_modules เพื่อป้องกันปัญหา dependency
+    stdin_open: true
+    tty: true
     environment:
-      - NODE_ENV=production
-    container_name: fe_container
+      - NODE_ENV=development
+    container_name: fe_dev
