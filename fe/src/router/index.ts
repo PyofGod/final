@@ -3,7 +3,6 @@ import crud from "@/views/crud.vue";
 import login from "@/views/Login.vue";
 import product from "@/views/product.vue";
 import categories from "@/views/categories.vue";
-import employee from "@/views/employee.vue";
 import customer from "@/views/customer.vue";
 import order from "@/views/order.vue";
 import supplier from "@/views/supplier.vue";
@@ -31,11 +30,6 @@ const router = createRouter({
       path: "/categories",
       name: "categories",
       component: categories,
-    },
-    {
-      path: "/employee",
-      name: "employee",
-      component: employee,
     },
     {
       path: "/customer",

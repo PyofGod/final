@@ -33,30 +33,8 @@ interface Customer {
   Phone: string;
 }
 
-interface Employee {
-  Id?: number;
-  FirstName: string;
-  LastName: string;
-  Title: string;
-  TitleOfCourtesy: string;
-  BirthDate: string;
-  HireDate: string;
-  Address: string;
-  City: string;
-  Region: string;
-  PostalCode: string;
-  Country: string;
-  HomePhone: string;
-  Extension: string;
-  Photo: string;
-  Notes: string;
-  ReportsTo: number;
-  PhotoPath: string;
-}
-
 const idOrder = ref<number | undefined>(undefined);
 const orderList = ref<Order[]>([]);
-const employeeList = ref<Employee[]>([]);
 const customerList = ref<Customer[]>([]);
 const customerId = ref<string>("");
 const employeeId = ref<number>(0);
@@ -77,10 +55,6 @@ const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 const loadOrders = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/orders`);
   orderList.value = res.data;
-};
-const loadEmployee = async () => {
-  const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);
-  employeeList.value = res.data;
 };
 const loadCustomer = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/customers`);
@@ -182,7 +156,6 @@ const handleDeleteOrder = async (index: number) => {
 
 onMounted(async () => {
   await loadOrders();
-  await loadEmployee();
   await loadCustomer();
 });
 </script>
@@ -198,10 +171,6 @@ onMounted(async () => {
       <div class="form-group">
         <label for="employeeId">รหัสพนักงาน</label>
         <input type="number" v-model="employeeId" placeholder="ID พนักงาน" />
-      </div>
-      <div class="form-group">
-        <label for="freight">ค่าขนส่ง</label>
-        <input type="text" v-model="freight" placeholder="ค่าขนส่ง" />
       </div>
       <div class="form-group">
         <label for="orderDate">วันที่สั่งซื้อ</label>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import KeycloakService from "./service/KeycloakService";
 </script>
 
 <template>
@@ -12,7 +13,6 @@ import { RouterLink, RouterView } from "vue-router";
           <RouterLink to="/allproduct" class="nav-link" active-class="active">All Products</RouterLink>
           <RouterLink to="/Product" class="nav-link" active-class="active">Product</RouterLink>
           <RouterLink to="/categories" class="nav-link" active-class="active">Catagories</RouterLink>
-          <RouterLink to="/employee" class="nav-link" active-class="active">Employee</RouterLink>
           <RouterLink to="/customer" class="nav-link" active-class="active">Customer</RouterLink>
           <RouterLink to="/order" class="nav-link" active-class="active">Order</RouterLink>
           <RouterLink to="/supplier" class="nav-link" active-class="active">Supplier</RouterLink>
@@ -40,6 +40,10 @@ body {
 }
 
 header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1000;
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -53,6 +57,7 @@ main {
 nav {
   font-size: 12px;
   margin-top: 2rem;
+  margin: 0 auto;
 }
 
 nav a.nav-link {

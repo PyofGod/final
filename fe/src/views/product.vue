@@ -13,6 +13,7 @@ interface Product {
   UnitPrice: string;
   UnitsInStock: number;
   UnitsOnOrder: number;
+  Freight: string;
 }
 
 interface Categories {
@@ -21,9 +22,26 @@ interface Categories {
   description: string
 }
 
+interface Supplier {
+  Id?: number;
+  CompanyName: string;
+  ContactName: string;
+  ContactTitle: string;
+  Address?: string;
+  City?: string;
+  PostalCode?: string;
+  Region?: string;
+  Country?: string;
+  Phone?: string;
+  Fax?: string;
+  HomePage?: string;
+}
+
 const idProduct = ref<number | undefined>(undefined)
 const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
+const supplierList = ref<Supplier[]>([]);
+const suppliers = ref<Number>(0);
 const categories = ref<number>(0);
 const discontinued = ref<number>(0);
 const productName = ref<string>("");
@@ -33,8 +51,9 @@ const supplierId = ref<number>(0);
 const unitPrice = ref<string>("");
 const unitsInStock = ref<number>(0);
 const unitsOnOrder = ref<number>(0);
+const freight = ref<string>("");
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = "http://192.168.1.140:4000";
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
@@ -44,6 +63,12 @@ const loadProduct = async () => {
 const loadCategory = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/categories`);
   categoriesList.value = res.data;
+}
+
+const loadSupplier = async () => {
+  const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/suppliers`);
+  supplierList.value = res.data;
+
 }
 
 const handleEditProduct = async (value: Product) => {
@@ -57,6 +82,7 @@ const handleEditProduct = async (value: Product) => {
   quantityPerUnit.value = value.QuantityPerUnit;
   discontinued.value = value.Discontinued;
   categories.value = value.CategoryId;
+  freight.value = value.Freight;
 };
 const subMit = async () => {
   if (idProduct.value !== undefined) {
@@ -73,6 +99,7 @@ const subMit = async () => {
           Discontinued: discontinued.value,
           CategoryId: categories.value,
           ProductName: productName.value,
+          Freight: freight.value,
         }
       );
       if (response.status === 200) {
@@ -93,6 +120,7 @@ const subMit = async () => {
         Discontinued: discontinued.value,
         CategoryId: categories.value,
         ProductName: productName.value,
+        Freight: freight.value,
       });
       if (res.status === 201) {
         await loadProduct();
@@ -118,6 +146,8 @@ const reset = async () => {
   quantityPerUnit.value = "";
   discontinued.value = 0;
   categories.value = 0;
+  freight.value = "";
+
 }
 
 const handleDeleteProduct = async (index: number) => {
@@ -137,6 +167,7 @@ const handleDeleteProduct = async (index: number) => {
 onMounted(async () => {
   await loadProduct();
   await loadCategory();
+  await loadSupplier();
 });
 </script>
 
@@ -181,11 +212,21 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="supplierId">รหัสผู้จัดจำหน่าย</label>
-        <input type="number" v-model="supplierId" placeholder="กรอกรหัสผู้จัดจำหน่าย" required />
+        <select v-model="suppliers" required>
+          <option value="" disabled>-- เลือกผู้จำหน่าย --</option>
+          <option v-for="supplier in supplierList" :key="supplier.Id" :value="supplier.Id">
+            {{ supplier.ContactName }}
+          </option>
+        </select>
+
       </div>
       <div class="form-group">
         <label for="unitPrice">ราคาต่อหน่วย</label>
         <input type="text" v-model="unitPrice" placeholder="กรอกราคาต่อหน่วย" required />
+      </div>
+      <div class="form-group">
+        <label for="freight">ค่าขนส่ง</label>
+        <input type="text" v-model="freight" placeholder="กรอกค่าขนส่ง" required />
       </div>
       <div class="form-group">
         <label for="unitsInStock">จำนวนสินค้าในสต็อก</label>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
 import HttpService from "@/service/HttpService";
-import process from "process";
 
 interface Product {
   CategoryId: number;
@@ -14,6 +14,7 @@ interface Product {
   UnitPrice: string;
   UnitsInStock: number;
   UnitsOnOrder: number;
+  Freight: string;
 }
 
 interface Categories {
@@ -25,7 +26,9 @@ interface Categories {
 const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
 
-const BASE_PATH = process.env.PORT;
+const BASE_PATH = import.meta.env.VITE_PORT;
+console.log(BASE_PATH);
+const router = useRouter();
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
@@ -43,7 +46,15 @@ onMounted(async () => {
 });
 
 const handleOrderProduct = (product: Product) => {
-  alert(`คุณได้ทำการสั่งซื้อสินค้า ${product.ProductName}`);
+  router.push({
+    path: '/customer',
+    query: { productId: product.Id },
+  });
+};
+
+const getCategoryName = (categoryId: number) => {
+  const category = categoriesList.value.find(c => c.Id === categoryId);
+  return category ? category.name : 'ไม่พบหมวดหมู่';
 };
 </script>
 
@@ -70,11 +81,9 @@ const handleOrderProduct = (product: Product) => {
         <tbody>
           <tr v-for="(product, index) in productList" :key="product.Id">
             <td>{{ product.ProductName }}</td>
-            <td>{{ product.CategoryId }}</td>
-            <td
-              :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }"
-            >
-              {{ product.Discontinued === 1 ? "ขายอยู่" : "หมดแล้ว" }}
+            <td>{{ getCategoryName(product.CategoryId) }}</td>
+            <td :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }">
+              {{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}
             </td>
             <td>{{ product.QuantityPerUnit }}</td>
             <td>{{ product.ReorderLevel }}</td>

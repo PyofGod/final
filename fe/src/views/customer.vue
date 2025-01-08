@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router"; // สำหรับดึง query parameter
 import HttpService from "@/service/HttpService";
+
+interface Product {
+  CategoryId: number;
+  Discontinued: number;
+  Id?: number;
+  ProductName: string;
+  QuantityPerUnit: string;
+  ReorderLevel: number;
+  SupplierId: number;
+  UnitPrice: string;
+  UnitsInStock: number;
+  UnitsOnOrder: number;
+}
 
 interface Customer {
   Id?: string;
@@ -16,362 +30,188 @@ interface Customer {
   Phone: string;
 }
 
-const idCustomer = ref<string | undefined>(undefined);
-const customerList = ref<Customer[]>([]);
+const route = useRoute();
+const productId = ref<string | null>(route.query.productId as string | null);
+const productDetails = ref<Product | null>(null);
 
-const companyName = ref<string>("");
-const contactName = ref<string>("");
-const contactTitle = ref<string>("");
-const fax = ref<string>("");
-const address = ref<string>("");
-const city = ref<string>("");
-const region = ref<string>("");
-const postalCode = ref<string>("");
-const country = ref<string>("");
-const phone = ref<string>("");
+const customerList = ref<Customer[]>([]);
+const customerForm = ref<Customer>({
+  Address: '',
+  City: '',
+  CompanyName: '',
+  ContactName: '',
+  ContactTitle: '',
+  Country: '',
+  Fax: '',
+  Phone: '',
+  PostalCode: '',
+  Region: '',
+});
+
+const shippingAddress = ref<string>("");
 
 const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+
+const loadProductDetails = async () => {
+  if (productId.value) {
+    try {
+      const res = await HttpService.getAxiosClient().get(
+        `${BASE_PATH}/products/${productId.value}`
+      );
+      productDetails.value = res.data;
+    } catch (error) {
+      console.error("Failed to load product details", error);
+    }
+  }
+};
 
 const loadCustomer = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/customers`);
   customerList.value = res.data;
 };
-loadCustomer();
 
-const handleEditCustomer = async (value: Customer) => {
-  idCustomer.value = value.Id;
-  companyName.value = value.CompanyName;
-  contactName.value = value.ContactName;
-  contactTitle.value = value.ContactTitle;
-  fax.value = value.Fax || "";
-  address.value = value.Address;
-  city.value = value.City;
-  region.value = value.Region;
-  postalCode.value = value.PostalCode;
-  country.value = value.Country;
-  phone.value = value.Phone;
-};
-
-const submit = async () => {
-  if (idCustomer.value !== undefined) {
-    try {
-      const response = await HttpService.getAxiosClient().patch(
-        `${BASE_PATH}/customers/${idCustomer.value}`,
-        {
-          CompanyName: companyName.value,
-          ContactName: contactName.value,
-          ContactTitle: contactTitle.value,
-          Fax: fax.value,
-          Address: address.value,
-          City: city.value,
-          Region: region.value,
-          PostalCode: postalCode.value,
-          Country: country.value,
-          Phone: phone.value,
-        }
-      );
-      if (response.status === 200) {
-        await loadCustomer();
-      }
-    } catch (error) {
-      console.log("Failed to update customer", error);
-    }
-  } else {
-    try {
-      const res = await HttpService.getAxiosClient().post(
-        `${BASE_PATH}/customers`,
-        {
-          CompanyName: companyName.value,
-          ContactName: contactName.value,
-          ContactTitle: contactTitle.value,
-          Fax: fax.value,
-          Address: address.value,
-          City: city.value,
-          Region: region.value,
-          PostalCode: postalCode.value,
-          Country: country.value,
-          Phone: phone.value,
-        }
-      );
-      if (res.status === 201) {
-        await loadCustomer();
-        console.log("Customer added successfully");
-      } else {
-        console.log("Failed to add customer");
-      }
-    } catch (error) {
-      console.log("Failed to add customer", error);
-    }
+const submitOrder = async () => {
+  if (!productId.value || !shippingAddress.value || !customerForm.value.Address) {
+    alert("กรุณาเลือกสินค้าและกรอกข้อมูลการจัดส่ง");
+    return;
   }
-  reset();
-};
 
-const reset = async () => {
-  idCustomer.value = undefined;
-  companyName.value = "";
-  contactName.value = "";
-  contactTitle.value = "";
-  fax.value = "";
-  address.value = "";
-  city.value = "";
-  region.value = "";
-  postalCode.value = "";
-  country.value = "";
-  phone.value = "";
-};
-
-const handleDeleteCustomer = async (index: string) => {
   try {
-    const res = await HttpService.getAxiosClient().delete(
-      `${BASE_PATH}/customers/${index}`
-    );
-    if (res.status === 200) {
-      await loadCustomer();
-      console.log("Customer removed successfully");
-    } else {
-      console.log("Failed to remove customer");
+    const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/orders`, {
+      productId: productId.value,
+      shippingAddress: shippingAddress.value,
+      customerForm: customerForm.value,
+    });
+    if (res.status === 201) {
+      alert("สั่งซื้อสำเร็จ");
+      shippingAddress.value = "";
+      Object.keys(customerForm.value).forEach(key => {
+        customerForm.value[key as keyof Customer] = '';  // Reset the form
+      });
     }
   } catch (error) {
-    console.log("Failed to remove customer", error);
+    console.error("Failed to submit order", error);
   }
 };
+
+// โหลดข้อมูลเมื่อเริ่มต้น
+onMounted(() => {
+  loadProductDetails();
+  loadCustomer();
+});
 </script>
 
 <template>
-  <div class="customer-page">
-    <h1>รายชื่อลูกค้า</h1>
-    <form @submit.prevent="submit" class="customer-form">
-      <div class="form-group">
-        <label for="companyName">ชื่อบริษัท</label>
-        <input type="text" v-model="companyName" placeholder="กรอกชื่อบริษัท" required />
-      </div>
-      <div class="form-group">
-        <label for="contactName">ชื่อผู้ติดต่อ</label>
-        <input type="text" v-model="contactName" placeholder="กรอกชื่อผู้ติดต่อ" required />
-      </div>
-      <div class="form-group">
-        <label for="contactTitle">ตำแหน่งผู้ติดต่อ</label>
-        <input type="text" v-model="contactTitle" placeholder="กรอกตำแหน่งผู้ติดต่อ" required />
-      </div>
-      <div class="form-group">
-        <label for="fax">หมายเลขแฟกซ์</label>
-        <input type="text" v-model="fax" placeholder="กรอกหมายเลขแฟกซ์" />
-      </div>
-      <div class="form-group">
-        <label for="address">ที่อยู่</label>
-        <input type="text" v-model="address" placeholder="กรอกที่อยู่" required />
-      </div>
-      <div class="form-group">
-        <label for="city">เมือง</label>
-        <input type="text" v-model="city" placeholder="กรอกเมือง" required />
-      </div>
-      <div class="form-group">
-        <label for="region">ภาค</label>
-        <input type="text" v-model="region" placeholder="กรอกภาค" required />
-      </div>
-      <div class="form-group">
-        <label for="postalCode">รหัสไปรษณีย์</label>
-        <input type="text" v-model="postalCode" placeholder="กรอกรหัสไปรษณีย์" required />
-      </div>
-      <div class="form-group">
-        <label for="country">ประเทศ</label>
-        <input type="text" v-model="country" placeholder="กรอกประเทศ" required />
-      </div>
-      <div class="form-group">
-        <label for="phone">หมายเลขโทรศัพท์</label>
-        <input type="text" v-model="phone" placeholder="กรอกหมายเลขโทรศัพท์" required />
-      </div>
-      <button type="submit" class="btn-add">เพิ่ม / แก้ไข ลูกค้า</button>
-    </form>
+  <div v-if="productDetails" class="product-details">
+    <h2>ข้อมูลสินค้า</h2>
+    <p><strong>ชื่อสินค้า:</strong> {{ productDetails.ProductName }}</p>
+    <p><strong>ราคา:</strong> {{ productDetails.UnitPrice }} บาท</p>
+  </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>รหัส</th>
-            <th>ชื่อบริษัท</th>
-            <th>ชื่อผู้ติดต่อ</th>
-            <th>ตำแหน่งผู้ติดต่อ</th>
-            <th>โทรศัพท์</th>
-            <th>แฟกซ์</th>
-            <th>เมือง</th>
-            <th>ประเทศ</th>
-            <th>การกระทำ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(customer, index) in customerList" :key="index">
-            <td>{{ customer.Id }}</td>
-            <td>{{ customer.CompanyName }}</td>
-            <td>{{ customer.ContactName }}</td>
-            <td>{{ customer.ContactTitle }}</td>
-            <td>{{ customer.Phone }}</td>
-            <td>{{ customer.Fax }}</td>
-            <td>{{ customer.City }}</td>
-            <td>{{ customer.Country }}</td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-edit" @click="handleEditCustomer(customer)">
-                  แก้ไข
-                </button>
-                <button class="btn-delete"
-                  @click="() => { if (customer.Id !== undefined) handleDeleteCustomer(customer.Id) }">
-                  ลบ
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="shipping-form">
+    <h2>ข้อมูลลูกค้า</h2>
+    <form @submit.prevent="submitOrder">
+      <div class="form-group">
+        <label for="CompanyName">ชื่อบริษัท</label>
+        <input type="text" id="CompanyName" v-model="customerForm.CompanyName" placeholder="กรอกชื่อบริษัท" required>
+      </div>
+      <div class="form-group">
+        <label for="ContactName">ชื่อผู้ติดต่อ</label>
+        <input type="text" id="ContactName" v-model="customerForm.ContactName" placeholder="กรอกชื่อผู้ติดต่อ" required>
+      </div>
+      <div class="form-group">
+        <label for="ContactTitle">ตำแหน่ง</label>
+        <input type="text" id="ContactTitle" v-model="customerForm.ContactTitle" placeholder="กรอกตำแหน่ง" required>
+      </div>
+      <div class="form-group">
+        <label for="Address">ที่อยู่</label>
+        <input type="text" id="Address" v-model="customerForm.Address" placeholder="กรอกที่อยู่" required>
+      </div>
+      <div class="form-group">
+        <label for="City">เมือง</label>
+        <input type="text" id="City" v-model="customerForm.City" placeholder="กรอกเมือง" required>
+      </div>
+      <div class="form-group">
+        <label for="PostalCode">รหัสไปรษณีย์</label>
+        <input type="text" id="PostalCode" v-model="customerForm.PostalCode" placeholder="กรอกรหัสไปรษณีย์" required>
+      </div>
+      <div class="form-group">
+        <label for="Region">ภาค</label>
+        <input type="text" id="Region" v-model="customerForm.Region" placeholder="กรอกภาค" required>
+      </div>
+      <div class="form-group">
+        <label for="Country">ประเทศ</label>
+        <input type="text" id="Country" v-model="customerForm.Country" placeholder="กรอกประเทศ" required>
+      </div>
+      <div class="form-group">
+        <label for="Phone">โทรศัพท์</label>
+        <input type="text" id="Phone" v-model="customerForm.Phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+      </div>
+      <div class="form-group">
+        <label for="Fax">แฟกซ์</label>
+        <input type="text" id="Fax" v-model="customerForm.Fax" placeholder="กรอกแฟกซ์ (ถ้ามี)">
+      </div>
+      <div class="form-group">
+        <label for="shippingAddress">ที่อยู่การจัดส่ง</label>
+        <textarea id="shippingAddress" v-model="shippingAddress" placeholder="กรอกที่อยู่การจัดส่ง" required></textarea>
+      </div>
+      <button type="submit" class="btn-add">ยืนยันการสั่งซื้อ</button>
+    </form>
   </div>
 </template>
 
 <style scoped>
-.customer-page {
-  width: 80%;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #f5f5f5;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
-}
-
-h1 {
-  text-align: center;
-  color: #4CAF50;
-  font-size: 2.2rem;
+.product-details {
   margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-.customer-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
+.product-details h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #4CAF50;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
+.product-details p {
+  margin: 5px 0;
   font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 5px;
   color: #333;
 }
 
-input,
-textarea {
+.shipping-form {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.shipping-form h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #4CAF50;
+}
+
+textarea,
+input {
+  width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
   color: #333;
-  background-color: #fff;
-  transition: border-color 0.3s ease;
 }
 
-input:focus,
-textarea:focus {
+textarea:focus,
+input:focus {
   border-color: #4CAF50;
   outline: none;
 }
 
-textarea {
-  resize: vertical;
-  height: 120px;
-}
-
-.btn-add,
-.btn-edit,
-.btn-delete {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-}
-
-.btn-add {
-  background-color: #6C63FF;
-}
-
-.btn-add:hover {
-  background-color: #5a54e4;
-}
-
-.btn-edit {
-  background-color: #00bcd4;
-}
-
-.btn-edit:hover {
-  background-color: #00a1b1;
-}
-
-.btn-delete {
-  background-color: #ff4081;
-}
-
-.btn-delete:hover {
-  background-color: #f50057;
-}
-
-.table-container {
-  margin-top: 40px;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-th,
-td {
-  padding: 15px;
-  text-align: left;
-  font-size: 1rem;
-  color: #333;
-}
-
-th {
-  font-weight: 600;
-}
-
-td {
-  border-bottom: 1px solid #ddd;
-}
-
-tr:hover {
-  background-color: #f9f9f9;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-start;
-}
-
-@media (max-width: 768px) {
-  .customer-form {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-add,
-  .btn-edit,
-  .btn-delete {
-    width: 100%;
-    padding: 12px 0;
-  }
+.form-group {
+  margin-bottom: 15px;
 }
 </style>
