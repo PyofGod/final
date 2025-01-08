@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import HttpService from "@/service/HttpService";
+import process from "process";
 
 interface Product {
   CategoryId: number;
@@ -24,7 +25,7 @@ interface Categories {
 const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = process.env.PORT;
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
