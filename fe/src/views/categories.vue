@@ -13,7 +13,7 @@ const categoryList = ref<Category[]>([]);
 const categoryName = ref<string>("");
 const description = ref<string>("");
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadCategories = async () => {
   try {

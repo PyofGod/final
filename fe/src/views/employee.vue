@@ -44,7 +44,7 @@ const notes = ref<string>("");
 const reportsTo = ref<number>(0);
 const photoPath = ref<string>("");
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadEmployee = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);

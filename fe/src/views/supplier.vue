@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import HttpService from "@/service/HttpService";
 
 interface Supplier {
@@ -31,7 +31,7 @@ const phone = ref<string>("");
 const fax = ref<string>("");
 const homePage = ref<string>("");
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadSuppliers = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/suppliers`);
@@ -80,19 +80,22 @@ const submit = async () => {
         await loadSuppliers();
       }
     } catch (error) {
-      console.error('ไม่สามารถอัปเดตข้อมูลได้', error);
+      console.error("ไม่สามารถอัปเดตข้อมูลได้", error);
     }
   } else {
     try {
-      const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/suppliers`, supplierData);
+      const res = await HttpService.getAxiosClient().post(
+        `${BASE_PATH}/suppliers`,
+        supplierData
+      );
       if (res.status === 201) {
         await loadSuppliers();
-        console.log('เพิ่มข้อมูล Supplier สำเร็จ');
+        console.log("เพิ่มข้อมูล Supplier สำเร็จ");
       } else {
-        console.log('ไม่สามารถเพิ่มข้อมูลได้');
+        console.log("ไม่สามารถเพิ่มข้อมูลได้");
       }
     } catch (error) {
-      console.error('ไม่สามารถเพิ่มข้อมูลได้', error);
+      console.error("ไม่สามารถเพิ่มข้อมูลได้", error);
     }
   }
   reset();
@@ -117,15 +120,17 @@ const reset = () => {
 // ฟังก์ชันสำหรับลบข้อมูล Supplier
 const handleDeleteSupplier = async (id: number) => {
   try {
-    const res = await HttpService.getAxiosClient().delete(`${BASE_PATH}/suppliers/${id}`);
+    const res = await HttpService.getAxiosClient().delete(
+      `${BASE_PATH}/suppliers/${id}`
+    );
     if (res.status === 200) {
       await loadSuppliers();
-      console.log('ลบข้อมูล Supplier สำเร็จ');
+      console.log("ลบข้อมูล Supplier สำเร็จ");
     } else {
-      console.log('ไม่สามารถลบข้อมูลได้');
+      console.log("ไม่สามารถลบข้อมูลได้");
     }
   } catch (error) {
-    console.error('ไม่สามารถลบข้อมูลได้', error);
+    console.error("ไม่สามารถลบข้อมูลได้", error);
   }
 };
 
@@ -144,11 +149,19 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="contactName">ชื่อผู้ติดต่อ</label>
-        <input type="text" v-model="contactName" placeholder="กรอกชื่อผู้ติดต่อ" />
+        <input
+          type="text"
+          v-model="contactName"
+          placeholder="กรอกชื่อผู้ติดต่อ"
+        />
       </div>
       <div class="form-group">
         <label for="contactTitle">ตำแหน่งผู้ติดต่อ</label>
-        <input type="text" v-model="contactTitle" placeholder="กรอกตำแหน่งผู้ติดต่อ" />
+        <input
+          type="text"
+          v-model="contactTitle"
+          placeholder="กรอกตำแหน่งผู้ติดต่อ"
+        />
       </div>
       <div class="form-group">
         <label for="address">ที่อยู่</label>
@@ -160,7 +173,11 @@ onMounted(async () => {
       </div>
       <div class="form-group">
         <label for="postalCode">รหัสไปรษณีย์</label>
-        <input type="text" v-model="postalCode" placeholder="กรอกรหัสไปรษณีย์" />
+        <input
+          type="text"
+          v-model="postalCode"
+          placeholder="กรอกรหัสไปรษณีย์"
+        />
       </div>
       <div class="form-group">
         <label for="region">ภูมิภาค</label>
@@ -219,9 +236,20 @@ onMounted(async () => {
             <td>{{ supplier.Fax }}</td>
             <td>{{ supplier.HomePage }}</td>
             <td>
-              <button class="btn-edit" @click="handleEditSupplier(supplier)">แก้ไข</button>
-              <button class="btn-delete"
-                @click="() => { if (supplier.Id !== undefined) handleDeleteSupplier(supplier.Id) }">ลบ</button>
+              <button class="btn-edit" @click="handleEditSupplier(supplier)">
+                แก้ไข
+              </button>
+              <button
+                class="btn-delete"
+                @click="
+                  () => {
+                    if (supplier.Id !== undefined)
+                      handleDeleteSupplier(supplier.Id);
+                  }
+                "
+              >
+                ลบ
+              </button>
             </td>
           </tr>
         </tbody>
@@ -235,7 +263,7 @@ onMounted(async () => {
   max-width: auto;
   margin: 40px auto;
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #333;
   background-color: #f5f5f5;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -267,7 +295,7 @@ onMounted(async () => {
 .supplier-form button {
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;

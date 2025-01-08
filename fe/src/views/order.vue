@@ -50,7 +50,7 @@ const shipRegion = ref<string>("");
 const shipVia = ref<number | null>(null);
 const shippedDate = ref<string>("");
 
-const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
+const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadOrders = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/orders`);

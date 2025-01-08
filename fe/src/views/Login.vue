@@ -21,17 +21,19 @@ export default defineComponent({
   data() {
     return {
       protect: "not protect yet",
-      isAdmin: false
-    }
-  }, async mounted() {
+      isAdmin: false,
+    };
+  },
+  async mounted() {
     try {
-      const res = await HttpService.getAxiosClient().get("https://b4wm7jx1-4000.asse.devtunnels.ms/api/profile")
-      this.protect = JSON.stringify(res.data, null, 4)
+      const res = await HttpService.getAxiosClient().get(
+        import.meta.env.VITE_PORT
+      );
+      this.protect = JSON.stringify(res.data, null, 4);
     } catch (e) {
-      console.log(e)
-      this.protect = "Can't get protected API "
+      console.log(e);
+      this.protect = "Can't get protected API ";
     }
-
   },
   methods: {
     Login() {
@@ -41,17 +43,17 @@ export default defineComponent({
       return KeyCloakService.GetAccesToken();
     },
     DecodeToken() {
-      return KeyCloakService.GetDecodeToken()
+      return KeyCloakService.GetDecodeToken();
     },
     DecodeIdToken() {
-      return KeyCloakService.GetDecodeIdToken()
+      return KeyCloakService.GetDecodeIdToken();
     },
     LogOut() {
       return KeyCloakService.CallLogOut();
     },
     UserRoles() {
       return KeyCloakService.GetUserRoles();
-    }
+    },
   },
 });
 </script>

@@ -53,7 +53,7 @@ const unitsInStock = ref<number>(0);
 const unitsOnOrder = ref<number>(0);
 const freight = ref<string>("");
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
