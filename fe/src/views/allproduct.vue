@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import HttpService from "@/service/HttpService";
 
 interface Product {
@@ -16,15 +16,15 @@ interface Product {
 }
 
 interface Categories {
-  Id: number,
-  name: string,
-  description: string
+  Id: number;
+  name: string;
+  description: string;
 }
 
 const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);
@@ -35,7 +35,6 @@ const loadCategory = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/categories`);
   categoriesList.value = res.data;
 };
-
 
 onMounted(async () => {
   await loadProduct();
@@ -71,8 +70,10 @@ const handleOrderProduct = (product: Product) => {
           <tr v-for="(product, index) in productList" :key="product.Id">
             <td>{{ product.ProductName }}</td>
             <td>{{ product.CategoryId }}</td>
-            <td :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }">
-              {{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}
+            <td
+              :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }"
+            >
+              {{ product.Discontinued === 1 ? "ขายอยู่" : "หมดแล้ว" }}
             </td>
             <td>{{ product.QuantityPerUnit }}</td>
             <td>{{ product.ReorderLevel }}</td>
@@ -81,7 +82,9 @@ const handleOrderProduct = (product: Product) => {
             <td>{{ product.UnitsOnOrder }}</td>
             <td>
               <div class="action-buttons">
-                <button class="btn-order" @click="handleOrderProduct(product)">สั่งซื้อ</button>
+                <button class="btn-order" @click="handleOrderProduct(product)">
+                  สั่งซื้อ
+                </button>
               </div>
             </td>
           </tr>
@@ -96,7 +99,7 @@ const handleOrderProduct = (product: Product) => {
   max-width: auto;
   margin: 40px auto;
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #333;
   background-color: #f5f5f5;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -105,7 +108,7 @@ const handleOrderProduct = (product: Product) => {
 
 h1 {
   text-align: center;
-  color: #4CAF50;
+  color: #4caf50;
   font-size: 2.2rem;
   margin-bottom: 20px;
 }

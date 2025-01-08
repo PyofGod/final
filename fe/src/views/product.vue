@@ -34,7 +34,7 @@ const unitPrice = ref<string>("");
 const unitsInStock = ref<number>(0);
 const unitsOnOrder = ref<number>(0);
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadProduct = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/products`);

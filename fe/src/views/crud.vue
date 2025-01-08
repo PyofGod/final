@@ -12,7 +12,7 @@ const fruits = ref<fruits[]>([]);
 const selectedId = ref<number>(0);
 const fruitName = ref<string>("");
 const fruitColor = ref<string>("");
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadData = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/fruits`);

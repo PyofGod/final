@@ -16,7 +16,7 @@ interface Customer {
 
 const customerList = ref<Customer[]>([]);
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadCustomer = async () => {
   try {

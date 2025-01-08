@@ -13,7 +13,7 @@ const categoryList = ref<Category[]>([]);
 const categoryName = ref<string>("");
 const description = ref<string>("");
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadCategories = async () => {
   try {

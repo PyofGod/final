@@ -44,7 +44,7 @@ const notes = ref<string>("");
 const reportsTo = ref<number>(0);
 const photoPath = ref<string>("");
 
-const BASE_PATH = "http://192.168.1.140:4000";
+const BASE_PATH = "https://b4wm7jx1-4000.asse.devtunnels.ms";
 
 const loadEmployee = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/employees`);

@@ -25,7 +25,7 @@ export default defineComponent({
     }
   }, async mounted() {
     try {
-      const res = await HttpService.getAxiosClient().get("http://http://192.168.1.140/api/profile")
+      const res = await HttpService.getAxiosClient().get("https://b4wm7jx1-4000.asse.devtunnels.ms/api/profile")
       this.protect = JSON.stringify(res.data, null, 4)
     } catch (e) {
       console.log(e)
