@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router"; // สำหรับดึง query parameter
+import { useRoute, useRouter } from "vue-router"; // สำหรับดึง query parameter
 import HttpService from "@/service/HttpService";
+import Product from "./product.vue";
+
+const router = useRouter();
 
 interface Product {
   CategoryId: number;
@@ -14,6 +17,7 @@ interface Product {
   UnitPrice: string;
   UnitsInStock: number;
   UnitsOnOrder: number;
+  Freight: string;
 }
 
 interface Customer {
@@ -48,8 +52,6 @@ const customerForm = ref<Customer>({
   Region: '',
 });
 
-const shippingAddress = ref<string>("");
-
 const BASE_PATH = import.meta.env.VITE_PORT;
 
 const loadProductDetails = async () => {
@@ -71,30 +73,64 @@ const loadCustomer = async () => {
 };
 
 const submitOrder = async () => {
-  if (!productId.value || !shippingAddress.value || !customerForm.value.Address) {
-    alert("กรุณาเลือกสินค้าและกรอกข้อมูลการจัดส่ง");
+  // ตรวจสอบข้อมูลลูกค้า
+  if (!customerForm.value.Address || !customerForm.value.City || !customerForm.value.PostalCode) {
+    alert("กรุณากรอกข้อมูลลูกค้าให้ครบถ้วน");
     return;
   }
 
   try {
-    const res = await HttpService.getAxiosClient().post(`${BASE_PATH}/orders`, {
-      productId: productId.value,
-      shippingAddress: shippingAddress.value,
-      customerForm: customerForm.value,
-    });
-    if (res.status === 201) {
-      alert("สั่งซื้อสำเร็จ");
-      shippingAddress.value = "";
-      Object.keys(customerForm.value).forEach(key => {
-        customerForm.value[key as keyof Customer] = '';  // Reset the form
-      });
+    const orderPayload = {
+      ShippedDate: new Date().toISOString(),  // ตัวอย่าง: วันที่จัดส่งเป็นวันที่ปัจจุบัน
+      ShipRegion: customerForm.value.Region,
+      ShipPostalCode: customerForm.value.PostalCode,
+      ShipName: customerForm.value.CompanyName,
+      ShipCountry: customerForm.value.Country,
+      ShipCity: customerForm.value.City,
+      ShipAddress: customerForm.value.Address,
+      OrderDate: new Date().toISOString(),
+      Freight: productDetails.value?.Freight,
+      CustomerId: "",
+      ProductId: productId.value
+    };
+
+    const customerPayload = {
+      CompanyName: customerForm.value.CompanyName,
+      ContactName: customerForm.value.ContactName,
+      ContactTitle: customerForm.value.ContactTitle,
+      Address: customerForm.value.Address,
+      City: customerForm.value.City,
+      PostalCode: customerForm.value.PostalCode,
+      Region: customerForm.value.Region,
+      Country: customerForm.value.Country,
+      Phone: customerForm.value.Phone,
+      Fax: customerForm.value.Fax || null,
+    };
+
+    // ส่งข้อมูลลูกค้าไปยัง API
+    const customerRes = await HttpService.getAxiosClient().post(`${BASE_PATH}/customers`, customerPayload);
+
+    if (customerRes.status === 201) {
+      orderPayload.CustomerId = customerRes.data.Id;  // เพิ่ม customerId
+
+      // ส่งคำสั่งซื้อ
+      const orderRes = await HttpService.getAxiosClient().post(`${BASE_PATH}/orders`, orderPayload);
+      if (orderRes.status === 201) {
+        alert("สั่งซื้อสำเร็จ");
+
+        router.push({ name: 'order', query: { orderId: orderRes.data.Id } });
+
+        // รีเซ็ตฟอร์มหลังจากสั่งซื้อสำเร็จ
+        Object.keys(customerForm.value).forEach(key => {
+          customerForm.value[key as keyof Customer] = ''; // รีเซ็ตฟอร์ม
+        });
+      }
     }
   } catch (error) {
     console.error("Failed to submit order", error);
   }
 };
 
-// โหลดข้อมูลเมื่อเริ่มต้น
 onMounted(() => {
   loadProductDetails();
   loadCustomer();
@@ -150,10 +186,6 @@ onMounted(() => {
       <div class="form-group">
         <label for="Fax">แฟกซ์</label>
         <input type="text" id="Fax" v-model="customerForm.Fax" placeholder="กรอกแฟกซ์ (ถ้ามี)">
-      </div>
-      <div class="form-group">
-        <label for="shippingAddress">ที่อยู่การจัดส่ง</label>
-        <textarea id="shippingAddress" v-model="shippingAddress" placeholder="กรอกที่อยู่การจัดส่ง" required></textarea>
       </div>
       <button type="submit" class="btn-add">ยืนยันการสั่งซื้อ</button>
     </form>

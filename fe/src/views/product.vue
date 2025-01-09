@@ -41,7 +41,6 @@ const idProduct = ref<number | undefined>(undefined)
 const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
 const supplierList = ref<Supplier[]>([]);
-const suppliers = ref<Number>(0);
 const categories = ref<number>(0);
 const discontinued = ref<number>(0);
 const productName = ref<string>("");
@@ -68,7 +67,6 @@ const loadCategory = async () => {
 const loadSupplier = async () => {
   const res = await HttpService.getAxiosClient().get(`${BASE_PATH}/suppliers`);
   supplierList.value = res.data;
-
 }
 
 const handleEditProduct = async (value: Product) => {
@@ -174,7 +172,7 @@ onMounted(async () => {
 
 <template>
   <div class="product-page">
-    <h1>Product List</h1>
+    <h1>เพิ่มสินค้า</h1>
     <form @submit.prevent="subMit" class="product-form">
       <div class="form-group">
         <label for="productName">ชื่อสินค้า</label>
@@ -185,7 +183,7 @@ onMounted(async () => {
         <select v-model="categories" required>
           <option value="" disabled>-- เลือกหมวดหมู่ --</option>
           <option v-for="category in categoriesList" :key="category.Id" :value="category.Id">
-            {{ category.name }}
+            {{ category.Id }} - {{ category.name }}
           </option>
         </select>
       </div>
@@ -210,16 +208,17 @@ onMounted(async () => {
         <label for="reorderLevel">ระดับการสั่งซื้อ</label>
         <input type="number" v-model="reorderLevel" placeholder="กรอกระดับการสั่งซื้อ" required />
       </div>
+
       <div class="form-group">
         <label for="supplierId">รหัสผู้จัดจำหน่าย</label>
-        <select v-model="suppliers" required>
+        <select v-model="supplierId" required>
           <option value="" disabled>-- เลือกผู้จำหน่าย --</option>
           <option v-for="supplier in supplierList" :key="supplier.Id" :value="supplier.Id">
-            {{ supplier.ContactName }}
+            {{ supplier.Id }} - {{ supplier.ContactName }}
           </option>
         </select>
-
       </div>
+
       <div class="form-group">
         <label for="unitPrice">ราคาต่อหน่วย</label>
         <input type="text" v-model="unitPrice" placeholder="กรอกราคาต่อหน่วย" required />
@@ -251,6 +250,7 @@ onMounted(async () => {
             <th>ระดับการสั่งซื้อ</th>
             <th>รหัสผู้จัดจำหน่าย</th>
             <th>ราคาต่อหน่วย</th>
+            <th>ค่าขนส่ง</th>
             <th>จำนวนสินค้าในสต็อก</th>
             <th>จำนวนสินค้าที่สั่ง</th>
             <th>การดำเนินการ</th>
@@ -265,10 +265,11 @@ onMounted(async () => {
             <td :style="{ color: product.Discontinued === 1 ? 'green' : 'red' }">
               {{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}
             </td>
-            <td>{{ product.QuantityPerUnit }}</td>
+            <td>{{ product.QuantityPerUnit }} </td>
             <td>{{ product.ReorderLevel }}</td>
             <td>{{ product.SupplierId }}</td>
-            <td>{{ product.UnitPrice }}</td>
+            <td>{{ product.UnitPrice }} บาท</td>
+            <td>{{ product.Freight }} บาท</td>
             <td>{{ product.UnitsInStock }}</td>
             <td>{{ product.UnitsOnOrder }}</td>
             <td>

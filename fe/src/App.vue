@@ -10,6 +10,7 @@ import KeycloakService from "./service/KeycloakService";
         <nav>
           <RouterLink to="/" class="nav-link" active-class="active">Home</RouterLink>
           <RouterLink to="/login" class="nav-link" active-class="active">Login</RouterLink>
+          <RouterLink to="/user" class="nav-link" active-class="active">user</RouterLink>
           <RouterLink to="/allproduct" class="nav-link" active-class="active">All Products</RouterLink>
           <RouterLink to="/Product" class="nav-link" active-class="active">Product</RouterLink>
           <RouterLink to="/categories" class="nav-link" active-class="active">Catagories</RouterLink>

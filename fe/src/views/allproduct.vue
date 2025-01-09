@@ -27,7 +27,6 @@ const productList = ref<Product[]>([]);
 const categoriesList = ref<Categories[]>([]);
 
 const BASE_PATH = import.meta.env.VITE_PORT;
-console.log(BASE_PATH);
 const router = useRouter();
 
 const loadProduct = async () => {
@@ -60,7 +59,7 @@ const getCategoryName = (categoryId: number) => {
 
 <template>
   <div class="product-page">
-    <h1>Product List</h1>
+    <h1>รายการสินค้า</h1>
 
     <div class="table-container">
       <table>
@@ -70,10 +69,9 @@ const getCategoryName = (categoryId: number) => {
             <th>หมวดหมู่</th>
             <th>สถานะสินค้า</th>
             <th>จำนวนต่อหน่วย</th>
-            <th>ระดับการสั่งซื้อ</th>
             <th>ราคาต่อหน่วย</th>
+            <th>ค่าขนส่ง</th>
             <th>จำนวนสินค้าในสต็อก</th>
-            <th>จำนวนสินค้าที่สั่ง</th>
             <th>การดำเนินการ</th>
           </tr>
         </thead>
@@ -86,10 +84,9 @@ const getCategoryName = (categoryId: number) => {
               {{ product.Discontinued === 1 ? 'ขายอยู่' : 'หมดแล้ว' }}
             </td>
             <td>{{ product.QuantityPerUnit }}</td>
-            <td>{{ product.ReorderLevel }}</td>
-            <td>{{ product.UnitPrice }}</td>
+            <td>{{ product.UnitPrice }} บาท</td>
+            <td>{{ product.Freight }} บาท</td>
             <td>{{ product.UnitsInStock }}</td>
-            <td>{{ product.UnitsOnOrder }}</td>
             <td>
               <div class="action-buttons">
                 <button class="btn-order" @click="handleOrderProduct(product)">
@@ -139,7 +136,10 @@ table {
 th,
 td {
   padding: 12px;
-  text-align: left;
+  text-align: center;
+  /* จัดข้อความให้อยู่กลางแนวนอน */
+  vertical-align: middle;
+  /* จัดข้อความให้อยู่กลางแนวตั้ง */
   font-size: 0.9rem;
   color: #333;
 }

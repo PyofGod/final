@@ -7,6 +7,7 @@ import customer from "@/views/customer.vue";
 import order from "@/views/order.vue";
 import supplier from "@/views/supplier.vue";
 import allproduct from "@/views/allproduct.vue";
+import user from "@/views/user.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: login,
+    },
+    {
+      path: "/user",
+      name: "user",
+      component: user,
     },
     {
       path: "/product",
