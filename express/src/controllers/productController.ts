@@ -43,6 +43,7 @@ export class ProductController extends Controller {
         UnitPrice: true,
         UnitsInStock: true,
         UnitsOnOrder: true,
+        Freight: true,
       },
     });
     return product || "ไม่พบข้อมูล";
@@ -64,6 +65,7 @@ export class ProductController extends Controller {
       UnitPrice: string;
       UnitsInStock: number;
       UnitsOnOrder: number;
+      Freight: string;
     }
   ) {
     const isAdmin = req.user.role.includes("admin");
@@ -73,6 +75,7 @@ export class ProductController extends Controller {
 
     const product = await prisma.product.create({
       data: {
+        Freight: requestBody.Freight,
         ProductName: requestBody.ProductName,
         CategoryId: requestBody.CategoryId,
         Discontinued: requestBody.Discontinued,
@@ -104,6 +107,7 @@ export class ProductController extends Controller {
       UnitPrice?: string;
       UnitsInStock?: number;
       UnitsOnOrder?: number;
+      Freight?: string;
     }
   ) {
     const idNumber = parseInt(id, 10);

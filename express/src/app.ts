@@ -5,6 +5,7 @@ const app: Express = express();
 const port = Number(process.env.PORT) || 4000;
 const apikey = process.env.APIKEY || "123456789";
 
+
 app.use(cors());
 
 app.use(express.static("static"));

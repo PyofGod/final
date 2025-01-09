@@ -1,10 +1,11 @@
 import Express from "express";
 import { createDecoder, createVerifier } from "fast-jwt";
-
 import HttpError from "./interfaces/http-error";
 import HttpStatus from "./interfaces/http-status";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-if (!process.env.PUBLIC_KEY && !process.env.URL) {
+if (!process.env.PUBLIC_KEY && !process.env.KEYCLOAK_URL) {
   throw new Error("Require keycloak PUBLIC_KEY or URL with REALM.");
 }
 
@@ -51,7 +52,6 @@ export async function expressAuthentication(
         break;
       }
   }
-
   return payload;
 }
 
@@ -70,7 +70,6 @@ async function verifyOnline(token: string) {
       headers: { authorization: `Bearer ${token}` },
     }
   ).catch((e) => console.error(e));
-  console.log("res", res);
 
   if (!res) throw new Error("ไม่สามารถเข้าถึงระบบยืนยันตัวตน");
   if (!res.ok) {

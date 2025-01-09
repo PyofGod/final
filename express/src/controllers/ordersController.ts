@@ -45,18 +45,16 @@ export class OrderController extends Controller {
     @Body()
     requestBody: {
       CustomerId?: string;
-      EmployeeId: number;
       Freight: string;
       OrderDate?: string;
-      RequiredDate?: string;
       ShipAddress?: string;
       ShipCity?: string;
       ShipCountry?: string;
       ShipName?: string;
       ShipPostalCode?: string;
       ShipRegion?: string;
-      ShipVia?: number;
       ShippedDate?: string;
+      ProductId?: number;
     }
   ) {
     return prisma.order.create({
@@ -75,18 +73,16 @@ export class OrderController extends Controller {
     @Body()
     requestBody: {
       CustomerId?: string;
-      EmployeeId?: number;
       Freight?: string;
       OrderDate?: string;
-      RequiredDate?: string;
       ShipAddress?: string;
       ShipCity?: string;
       ShipCountry?: string;
       ShipName?: string;
       ShipPostalCode?: string;
       ShipRegion?: string;
-      ShipVia?: number;
       ShippedDate?: string;
+      ProductId?: number;
     }
   ) {
     const idNumber = parseInt(id, 10);

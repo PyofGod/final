@@ -18,6 +18,7 @@ model Product {
   ProductName     String
   CategoryId      Int
   Id              Int     @id @default(autoincrement())
+  Freight         String?
 }
 
 model Fruit {
@@ -30,27 +31,6 @@ model Categories {
   Id          Int     @id @default(autoincrement())
   name        String
   description String?
-}
-
-model Employee {
-  Address         String?
-  BirthDate       String?
-  City            String?
-  Country         String?
-  Extension       String?
-  FirstName       String?
-  HireDate        String?
-  HomePhone       String?
-  Id              Int     @id @default(autoincrement())
-  LastName        String?
-  Notes           String?
-  Photo           String?
-  PhotoPath       String?
-  PostalCode      String?
-  Region          String?
-  ReportsTo       Int?
-  Title           String?
-  TitleOfCourtesy String?
 }
 
 model Customer {
@@ -84,17 +64,15 @@ model Supplier {
 
 model Order {
   CustomerId     String?
-  EmployeeId     Int
-  Freight        String
+  Freight        String?
   Id             Int     @id @default(autoincrement())
   OrderDate      String?
-  RequiredDate   String?
   ShipAddress    String?
   ShipCity       String?
   ShipCountry    String?
   ShipName       String?
   ShipPostalCode String?
   ShipRegion     String?
-  ShipVia        Int?
   ShippedDate    String?
+  ProductId      Int?
 }
