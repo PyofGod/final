@@ -76,3 +76,28 @@ model Order {
   ShippedDate    String?
   ProductId      Int?
 }
+
+model KeycloakUser {
+  id        String            @id @default(uuid()) // Keycloak user ID
+  email     String?           @unique
+  username  String            @unique
+  firstName String?
+  lastName  String?
+  roles     UserRoleMapping[]
+}
+
+model KeycloakRole {
+  id    String            @id @default(uuid()) // Keycloak role ID
+  name  String            @unique
+  users UserRoleMapping[]
+}
+
+model UserRoleMapping {
+  id     Int          @id @default(autoincrement())
+  userId String
+  roleId String
+  user   KeycloakUser @relation(fields: [userId], references: [id])
+  role   KeycloakRole @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId]) // Prevent duplicate role assignments
+}
